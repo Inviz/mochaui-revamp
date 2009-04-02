@@ -131,24 +131,5 @@ ART.Window.Traits.Resizable = new Class({
 ART.Window.Extended = new Class($merge(ART.Theme.Aqua, {
 	Extends: ART.Window,
 
-	Inherits: ART.Window.Traits.Draggable,
-
-	options: {
-		header: null,
-		footer: null,
-		request: {},
-		content: null
-	},
-
-	initialize: function(options) {
-		this.parent(options)
-		if (this.options.header) this.header.setContent(this.options.header)
-		this.setContent(this.options)
-		if (this.options.footer) this.footer.setContent(this.options.footer)
-	},
-
-	setContent: function(){
-		this.content.setContent.apply(this.content, arguments);
-		return this;
-	}
+	Inherits: ART.Window.Traits.Draggable
 }))

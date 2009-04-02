@@ -10,18 +10,6 @@ MUI.extend({
 		windowsVisible: true,         // Ctrl-Alt-Q to toggle window visibility
 		focusingWindow: false		
 	}	
-});	
-
-MUI.Windows.contentOptions = {
-	'content': null,
-	'request': {
-		'url': ''
-	}
-};
-
-MUI.Windows.panelOptions = $merge(MUI.Windows.contentOptions, {
-	'position': 'top',
-	'height': 29
 });
 
 MUI.Windows.windowOptionsOriginal = $merge(MUI.Windows.windowOptions);
@@ -51,7 +39,11 @@ MUI.Window = new Class({
 		
 		onBlur: function() {
 			console.log('blur')
-		}
+		},
+		header: null,
+		footer: null,
+		request: {},
+		content: null
 	},
 	
 	initialize: function(options) {
@@ -64,6 +56,18 @@ MUI.Window = new Class({
 		} else {
 			this.show();
 		}
+		
+		this.set(options)
+	},
+	
+	set: function(options) {
+		if (options) this.setOptions(options)
+		
+		/*Fuck, i have something to do with naming. footer & header are taken already*/
+		if (this.options.footer) this.foot = new MUI.Container(this.footer, this.options.footer)
+		if (this.options.header) this.head = new MUI.Container(this.header, $merge({content: this.options.title}, this.options.header))
+		
+		this.cont = new MUI.Container(this.content, this.options)
 	},
 	
 	show: function() {

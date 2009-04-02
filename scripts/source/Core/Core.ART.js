@@ -61,10 +61,11 @@ MUI.Container = new Class({
 	},
 	
 	initialize: function() {
-		var params = Array.link(arguments, {element: Element.type, container: Element.type, options: Object.type})
+		var params = Array.link(arguments, {element: Element.type, container: Element.type, options: Object.type, content: String.type})
 		this.element = $(params.element)
 		this.container = params.container || new Element('div', {'class': 'container'}).inject(this.element)
-		this.set(params.options)
+		console.log(params)
+		this.set(params.options || params.content)
 	},
 	
 	setOptions: function(options) {

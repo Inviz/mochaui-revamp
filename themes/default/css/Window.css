@@ -1,3 +1,38 @@
+.art-window {
+
+}
+
+.art-window .art-window-content {
+  background: #fff;
+}
+
+.art-window .art-window-content .container {
+  padding: 0 5px;
+}
+
+.art-window .art-window-header{
+  padding: 0 5px;
+  line-height: 24px;
+  vertical-align: middle;
+  font-family: Lucida Grande;
+  text-align: center;
+  font-size: 1em;
+  text-shadow: 0px 1px 0px #e5e5ee;
+  filter: dropshadow(color=#e5e5ee,offX=0,offY=1);
+}
+
+.art-window .art-window-header .container {
+  cursor: move;
+}
+
+.art-window .art-window-footer {
+  padding: 0 5px;
+}
+
+
+
+
+
 /*
 
 Window.css for Mocha UI
