@@ -202,7 +202,7 @@ MUI.Dock = {
 
 		}.bind(this));
 
-		this.renderDockControls();
+		// this.renderDockControls();
 		
 		if (this.options.dockPosition == 'top'){
 			this.moveDock();
@@ -211,20 +211,20 @@ MUI.Dock = {
 	},
 	
 	setDockColors: function(){	
-		var dockButtonEnabled = MUI.getCSSRule('.dockButtonEnabled');
-		if (dockButtonEnabled && dockButtonEnabled.style.backgroundColor){ 	
-			this.options.enabledButtonColor = new Color(dockButtonEnabled.style.backgroundColor);
-		}
-		
-		var dockButtonDisabled = MUI.getCSSRule('.dockButtonDisabled');
-		if (dockButtonDisabled && dockButtonDisabled.style.backgroundColor){ 	
-			this.options.disabledButtonColor = new Color(dockButtonDisabled.style.backgroundColor);
-		}
-		
-		var trueButtonColor = MUI.getCSSRule('.dockButtonTrue');
-		if (trueButtonColor && trueButtonColor.style.backgroundColor){ 	
-			this.options.trueButtonColor = new Color(trueButtonColor.style.backgroundColor);
-		}									
+		//var dockButtonEnabled = MUI.getCSSRule('.dockButtonEnabled');
+		//if (dockButtonEnabled && dockButtonEnabled.style.backgroundColor){ 	
+		//	this.options.enabledButtonColor = new Color(dockButtonEnabled.style.backgroundColor);
+		//}
+		//
+		//var dockButtonDisabled = MUI.getCSSRule('.dockButtonDisabled');
+		//if (dockButtonDisabled && dockButtonDisabled.style.backgroundColor){ 	
+		//	this.options.disabledButtonColor = new Color(dockButtonDisabled.style.backgroundColor);
+		//}
+		//
+		//var trueButtonColor = MUI.getCSSRule('.dockButtonTrue');
+		//if (trueButtonColor && trueButtonColor.style.backgroundColor){ 	
+		//	this.options.trueButtonColor = new Color(trueButtonColor.style.backgroundColor);
+		//}									
 	},
 		
 	renderDockControls: function(){

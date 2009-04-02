@@ -4745,18 +4745,11 @@ MUI.Panel = new Class({
 			images:         [],
 			js:             [],
 			onload:         null
-		},		
-		loadMethod:         null,
-		contentURL:         null,
-	
-		// xhr options
-		method:             'get',
-		data:               null,
-		evalScripts:        true,
-		evalResponse:       false,
+		},
 	
 		// html options
-		content:            'Panel content',
+		content:            null,
+		request: 						null,
 		
 		// Tabs
 		tabsURL:            null,

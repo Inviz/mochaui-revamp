@@ -71,7 +71,9 @@ initializeWindows = function(){
 	MUI.ajaxpageWindow = function(){
 		new MUI.Window({
 			id: 'ajaxpage',
-			contentURL: 'pages/lipsum.html',
+			request: {
+				url: 'pages/lipsum.html'
+			},
 			width: 340,
 			height: 150
 		});
@@ -102,36 +104,45 @@ initializeWindows = function(){
 		new MUI.Window({
 			id: 'youtube',
 			title: 'YouTube in Iframe',
-			loadMethod: 'iframe',
-			contentURL: 'pages/youtube.html',
+			content: {
+				iframe: {
+					src: 'pages/youtube.html'
+				}
+			},
 			width: 340,
 			height: 280,
 			resizeLimit: {'x': [330, 2500], 'y': [250, 2000]},
-			toolbar: true,
-			toolbarURL: 'pages/youtube-tabs.html',
-			toolbarOnload: function(){
-				MUI.initializeTabs('youtubeTabs');	
+			toolbar: {
+				request: {
+					url: 'pages/youtube-tabs.html',
+					onSuccess: function(){
+						MUI.initializeTabs('youtubeTabs');	
 
-				$('youtube1Link').addEvent('click', function(e){
-					MUI.updateContent({
-						'element':  $('youtube'),
-						'url':      'pages/youtube.html'
-					});
-				});
-	
-				$('youtube2Link').addEvent('click', function(e){
-					MUI.updateContent({
-						'element':  $('youtube'),
-						'url':      'pages/youtube2.html'
-					});
-				});
-	
-				$('youtube3Link').addEvent('click', function(e){
-					MUI.updateContent({
-						'element':  $('youtube'),	
-						'url':      'pages/youtube3.html'
-					});
-				});	
+						$('youtube1Link').addEvent('click', function(e){
+							$('youtube').retrieve('instance').set({
+								request: {
+									url: 'pages/youtube.html'
+								}
+							})
+						});
+
+						$('youtube2Link').addEvent('click', function(e){
+							$('youtube').retrieve('instance').set({
+								request: {
+									url: 'pages/youtube2.html'
+								}
+							})
+						});
+
+						$('youtube3Link').addEvent('click', function(e){
+							$('youtube').retrieve('instance').set({
+								request: {
+									url: 'pages/youtube3.html'
+								}
+							})
+						});	
+					}
+				}
 			}
 		});
 	}
@@ -154,9 +165,9 @@ initializeWindows = function(){
 			height: 160,
 			x: 570,
 			y: 140,
-			padding: { top: 0, right: 0, bottom: 0, left: 0 },
+			padding: 0,
 			require: {			
-				js: [MUI.path.plugins + 'coolclock/scripts/coolclock.js'],
+				javascripts: [MUI.path.plugins + 'coolclock/scripts/coolclock.js'],
 				onload: function(){
 					if (CoolClock) new CoolClock();
 				}	
@@ -172,19 +183,28 @@ initializeWindows = function(){
 	
 	MUI.parametricsWindow = function(){	
 		new MUI.Window({
-			id: 'parametrics',
+			data: {
+				id: 'parametrics',
+			},
 			title: 'Window Parametrics',			
-			contentURL: MUI.path.plugins + 'parametrics/index.html',
-			width: 305,
-			height: 110,
+			request: {
+				url: MUI.path.plugins + 'parametrics/index.html'
+			},
+			footer: 'lol',
+			header: 'Window Parametrics',
+			style: {
+				base: {
+					width: 305,
+					height: 130
+				}
+			},
 			x: 570,
 			y: 160,
-			padding: { top: 12, right: 12, bottom: 10, left: 12 },
 			resizable: false,
-			maximizable: false,
+			maximize: false,
 			require: {
 				css: [MUI.path.plugins + 'parametrics/css/style.css'],
-				js: [MUI.path.plugins + 'parametrics/scripts/parametrics.js'],
+				javascripts: [MUI.path.plugins + 'parametrics/scripts/parametrics.js'],
 				onload: function(){	
 					if (MUI.addRadiusSlider) MUI.addRadiusSlider();
 					if (MUI.addShadowSlider) MUI.addShadowSlider();
@@ -207,40 +227,44 @@ initializeWindows = function(){
 			height: 350,
 			resizeLimit: {'x': [450, 2500], 'y': [300, 2000]},
 			scrollbars: false, // Could make this automatic if a 'panel' method were created
-			onContentLoaded: function(){	
-		
-				new MUI.Column({
-					container: 'splitWindow_contentWrapper',
-					id: 'splitWindow_sideColumn',
-					placement: 'left',
-					width: 170,
-					resizeLimit: [100, 300]
-				});
+			request: {
+				onApply: function(){	
+					new MUI.Column({
+						container: 'splitWindow_contentWrapper',
+						id: 'splitWindow_sideColumn',
+						placement: 'left',
+						width: 170,
+						resizeLimit: [100, 300]
+					});
 			
-				new MUI.Column({
-					container: 'splitWindow_contentWrapper',
-					id: 'splitWindow_mainColumn',
-					placement: 'main',
-					width: null,
-					resizeLimit: [100, 300]
-				});
+					new MUI.Column({
+						container: 'splitWindow_contentWrapper',
+						id: 'splitWindow_mainColumn',
+						placement: 'main',
+						width: null,
+						resizeLimit: [100, 300]
+					});
 			
-				new MUI.Panel({
-					header: false,
-					id: 'splitWindow_panel1',					
-					contentURL: 'license.html',
-					column: 'splitWindow_mainColumn',
-					panelBackground: '#fff'
-				});
+					new MUI.Panel({
+						header: false,
+						id: 'splitWindow_panel1',
+						request: {
+							url: 'license.html'
+						},
+						column: 'splitWindow_mainColumn',
+						panelBackground: '#fff'
+					});
 			
-				new MUI.Panel({
-					header: false,
-					id: 'splitWindow_panel2',
-					addClass: 'panelAlt',					
-					contentURL: 'pages/lipsum.html',
-					column: 'splitWindow_sideColumn'					
-				});
-
+					new MUI.Panel({
+						header: false,
+						id: 'splitWindow_panel2',
+						addClass: 'panelAlt',					
+						request: {
+							url: 'pages/lipsum.html'
+						},
+						column: 'splitWindow_sideColumn'					
+					});
+				}
 			}			
 		});
 	}
@@ -258,12 +282,12 @@ initializeWindows = function(){
 			contentURL: MUI.path.plugins + 'Fx.Morpher/example.html',
 			width: 330,
 			height: 330,
-			padding: { top: 0, right: 0, bottom: 0, left: 0 },
+			padding: 0,
 			scrollbars: false,
 			resizable: false,
 			require: {
 				css: [MUI.path.plugins + 'Fx.Morpher/css/style.css'],
-				js: [MUI.path.plugins + 'Fx.Morpher/scripts/cbox.js', MUI.path.plugins + 'Fx.Morpher/scripts/example.js'],
+				javascripts: [MUI.path.plugins + 'Fx.Morpher/scripts/cbox.js', MUI.path.plugins + 'Fx.Morpher/scripts/example.js'],
 				onload: function(){
 					createCanvas();
 					myAnim.delay(250);					
@@ -286,12 +310,18 @@ initializeWindows = function(){
 	MUI.eventsWindow = function(){
 		new MUI.Window({
 			id: 'windowevents',
-			title: 'Window Events',			
-			contentURL: 'pages/events.html',
-			width: 340,
-			height: 250,			
-			onContentLoaded: function(windowEl){
-				MUI.notification('Window content was loaded.');
+			title: 'Window Events',
+			style: {
+				base: {
+					width: 340,
+					height: 250
+				}
+			},
+			request: {
+				url: 'pages/events.html',
+				onApply: function(windowEl){
+					MUI.notification('Window content was loaded.');
+				}
 			},
 			onCloseComplete: function(){
 				MUI.notification('The window is closed.');
@@ -360,11 +390,13 @@ initializeWindows = function(){
 	MUI.formtestsWindow = function() {
 		new MUI.Window({
 			id: 'formtests',
-			title: 'Form Tests',			
-			contentURL: 'pages/formtests.html',
-			onContentLoaded: function(){
-				document.testForm.focusTest.focus();
-			}			
+			title: 'Form Tests',
+			request: {
+				url: 'pages/formtests.html',
+				onApply: function() {
+					document.testForm.focusTest.focus();
+				}
+			}		
 		});
 	}
 	if ($('formtestsLinkCheck')) {
@@ -379,13 +411,15 @@ initializeWindows = function(){
 		new MUI.Window({
 			id: id,
 			title: 'Accordian',			
-			contentURL: 'pages/accordian-demo.html',
+			request: {
+				url: 'pages/accordian-demo.html'
+			},
 			width: 300,
 			height: 200,
 			scrollbars: false,
 			resizable: false,
 			maximizable: false,				
-			padding: { top: 0, right: 0, bottom: 0, left: 0 },
+			padding: 0,
 			require: {
 				css: [MUI.path.plugins + 'accordian/css/style.css'],
 				onload: function(){
@@ -425,7 +459,9 @@ initializeWindows = function(){
 		new MUI.Window({
 			id: 'nocanvas',
 			title: 'No Canvas',			
-			contentURL: 'pages/lipsum.html',
+			request: {
+				url: 'pages/lipsum.html'
+			},
 			addClass: 'no-canvas',
 			width: 305,
 			height: 175,
@@ -483,7 +519,9 @@ initializeWindows = function(){
 			id: 'builder',
 			title: 'Window Builder',
 			icon: 'images/icons/16x16/page.gif',			
-			contentURL: MUI.path.plugins + 'windowform/',
+			request: {
+				url: MUI.path.plugins + 'windowform/'
+			},
 			width: 375,
 			height: 420,
 			maximizable: false,
@@ -491,7 +529,7 @@ initializeWindows = function(){
 			scrollbars: false,
 			require: {
 				css: [MUI.path.plugins + 'windowform/css/style.css'],			
-				js: [MUI.path.plugins + 'windowform/scripts/Window-from-form.js'],
+				javascripts: [MUI.path.plugins + 'windowform/scripts/Window-from-form.js'],
 				onload: function(){
 					$('newWindowSubmit').addEvent('click', function(e){
 						new Event(e).stop();
@@ -555,38 +593,42 @@ initializeWindows = function(){
 		new MUI.Window({
 			id: 'features',
 			title: 'Features',			
-			contentURL: 'pages/features-layout.html',
+			request: {
+				url:'pages/features-layout.html'
+			},
 			width: 275,
 			height: 250,
 			resizeLimit: {'x': [275, 2500], 'y': [125, 2000]},
 			require: {
 				css: [MUI.themePath() + 'css/Tabs.css']
 			},			
-			toolbar: true,
-			toolbarURL: 'pages/features-tabs.html',
-			toolbarOnload: function(){
-				MUI.initializeTabs('featuresTabs');
+			toolbar: {
+				request: {
+					url: 'pages/features-tabs.html',
+					onSuccess: function(){
+						MUI.initializeTabs('featuresTabs');
 
-				$('featuresLayoutLink').addEvent('click', function(e){
-					MUI.updateContent({
-						'element':  $('features'),
-						'url':       'pages/features-layout.html'
-					});
-				});
+						$('featuresLayoutLink').addEvent('click', function(e){
+							$('features').retrieve('instance').set({
+								request: {
+									url: 'pages/features-layout.html'
+								}
+							});
+						});
 
-				$('featuresWindowsLink').addEvent('click', function(e){
-					MUI.updateContent({
-						'element':  $('features'),
-						'url':       'pages/features-windows.html'
-					});
-				});
+						$('features').retrieve('instance').set({
+							request: {
+								url: 'pages/features-windows.html'
+							}
+						});
 
-				$('featuresGeneralLink').addEvent('click', function(e){
-					MUI.updateContent({
-						'element':  $('features'),
-						'url':       'pages/features-general.html'
-					});
-				});
+						$('features').retrieve('instance').set({
+							request: {
+								url: 'pages/features-general.html'
+							}
+						});
+					}
+				}
 			}
 		});
 	}
@@ -693,133 +735,137 @@ initializeColumns = function() {
 	// Add panels to first side column
 	new MUI.Panel({
 		id: 'files-panel',
-		title: 'Examples',		
-		contentURL: 'pages/file-view.html',
+		title: 'Examples',
 		column: 'sideColumn1',
 		require: {
 			css: [MUI.path.plugins + 'tree/css/style.css'],			
-			js: [MUI.path.plugins + 'tree/scripts/tree.js'],
+			javascripts: [MUI.path.plugins + 'tree/scripts/tree.js'],
 			onload: function(){
 				if (buildTree) buildTree('tree1');
-			}	
+			}.create({delay: 50})
 		},
-		onContentLoaded: function(){		
-			$('notesLink').addEvent('click', function(e){
-				MUI.updateContent({
-					element: $('mainPanel'),					
-					url: 'pages/notes.html',
-					title: 'Development Notes',
-					padding: { top: 8, right: 8, bottom: 8, left: 8 }
+		request: {
+			url: 'pages/file-view.html',
+			onApply: function(){		
+				$('notesLink').addEvent('click', function(e){
+					$('mainPanel').retrieve('instance').set({
+						request: {
+							url: 'pages/notes.html',
+						},
+						title: 'Development Notes',
+						padding: 8						
+					})
 				});
-			});
-			$('xhrLink').addEvent('click', function(e){
-				MUI.updateContent({
-					element: $('mainPanel'),
-					url: 'pages/lipsum.html',
-					title: 'Lorem Ipsum',
-					padding: { top: 8, right: 8, bottom: 8, left: 8 }
+				$('xhrLink').addEvent('click', function(e){
+					var panel = $('mainPanel').retrieve('instance').set({
+						title: 'Lorem Ipsum',
+						request: {
+							url: 'pages/lipsum.html',
+						}
+					})
 				});
-			});
-			$('youtube4Link').addEvent('click', function(e){
-				MUI.updateContent({
-					element: $('mainPanel'),
-					loadMethod: 'iframe',
-					url: 'pages/youtube.html',
-					title: 'Iframe: YouTube',
-					padding: { top: 0, right: 0, bottom: 0, left: 0 }
+				$('youtube4Link').addEvent('click', function(e){
+					$('mainPanel').retrieve('instance').set({
+						title: 'IFrame: YouTube',
+						request: {
+							url: 'pages/youtube.html',
+						},
+						padding: 0
+					})
+				});	
+				$('splitPanelLink').addEvent('click', function(e){
+					$('mainPanel').retrieve('instance').set({
+						title: 'Split Panel'
+					})
+					MUI.splitPanelPanel(); // This is initialized in mocha-init.js just like the windows.	
+				});	
+				$('splitWindowLink').addEvent('click', function(e){
+					MUI.splitWindow();
+				});		
+				$('ajaxpageLink').addEvent('click', function(e){
+					MUI.ajaxpageWindow();
+				});	
+				$('jsonLink').addEvent('click', function(e){
+					MUI.jsonWindows();
+				});	
+				$('youtubeLink').addEvent('click', function(e){
+					MUI.youtubeWindow();
+				});	
+				$('accordiantestLink').addEvent('click', function(e){
+					MUI.accordiantestWindow();
+				});	
+				$('clockLink').addEvent('click', function(e){
+					MUI.clockWindow();
 				});
-			});	
-			$('splitPanelLink').addEvent('click', function(e){
-				MUI.updateContent({
-					element: $('mainPanel'),
-					title: 'Split Panel',
-					padding: { top: 0, right: 0, bottom: 0, left: 0 }
+				$('parametricsLink').addEvent('click', function(e){
+					MUI.parametricsWindow();
 				});
-				MUI.splitPanelPanel(); // This is initialized in mocha-init.js just like the windows.	
-			});	
-			$('splitWindowLink').addEvent('click', function(e){
-				MUI.splitWindow();
-			});		
-			$('ajaxpageLink').addEvent('click', function(e){
-				MUI.ajaxpageWindow();
-			});	
-			$('jsonLink').addEvent('click', function(e){
-				MUI.jsonWindows();
-			});	
-			$('youtubeLink').addEvent('click', function(e){
-				MUI.youtubeWindow();
-			});	
-			$('accordiantestLink').addEvent('click', function(e){
-				MUI.accordiantestWindow();
-			});	
-			$('clockLink').addEvent('click', function(e){
-				MUI.clockWindow();
-			});
-			$('parametricsLink').addEvent('click', function(e){
-				MUI.parametricsWindow();
-			});
-			$('calendarLink').addEvent('click', function(e){
-				MUI.updateContent({
-					element: $('mainPanel'),
-					url: MUI.path.plugins + 'calendar/example.html',
-					title: 'Calendar Component',
-					padding: { top: 8, right: 8, bottom: 8, left: 8 },
-					require: {
-						css: [MUI.path.plugins + 'calendar/css/calendar.css'],			
-						js: [MUI.path.plugins + 'calendar/scripts/calendar.js'],
-						onload: function(){
-							myCal1 = new Calendar({ date1: 'd/m/Y' }, { direction: 1, tweak: { x: 6, y: 0 }});;
-						}	
-					}										
-				});
-			});			
-			$('fxmorpherLink').addEvent('click', function(e){
-				MUI.updateContent({
-					element: $('mainPanel'),
-					url: MUI.path.plugins + 'Fx.Morpher/',
-					title: 'Fx.Morpher Path Animation',
-					padding: { top: 8, right: 8, bottom: 8, left: 8 }
-				});
-				MUI.fxmorpherWindow();
-			});			
+				$('calendarLink').addEvent('click', function(e){
+					$('mainPanel').retrieve('instance').set({
+						title: 'IFrame: YouTube',
+						request: {
+							url: MUI.path.plugins + 'calendar/example.html',
+						},
+						padding: 8,
+						require: {
+							css: [MUI.path.plugins + 'calendar/css/calendar.css'],			
+							javascripts: [MUI.path.plugins + 'calendar/scripts/calendar.js'],
+							onload: function(){
+								myCal1 = new Calendar({ date1: 'd/m/Y' }, { direction: 1, tweak: { x: 6, y: 0 }});;
+							}	
+						}
+					})
+				});			
+				$('fxmorpherLink').addEvent('click', function(e){
+					$('mainPanel').retrieve('instance').set({
+						request: {
+							url: MUI.path.plugins + 'Fx.Morpher/',
+						},
+						title: 'Fx.Morpher Path Animation',
+						padding: 8
+					})
+					MUI.fxmorpherWindow();
+				});			
+			}
 		}
 	});
 	
 	new MUI.Panel({
 		id: 'panel2',
 		title: 'Ajax Form',
-		contentURL: 'pages/ajax.form.html',
 		column: 'sideColumn1',
 		height: 230,
-		onContentLoaded: function(){
-			$('myForm').addEvent('submit', function(e){
-				e.stop();
+		request: {
+			url: 'pages/ajax.form.html',
+			onApply: function(){
+				$('myForm').addEvent('submit', function(e){
+					e.stop();
 
-				$('spinner').show();
-				if ($('postContent') && MUI.options.standardEffects == true) {
-					$('postContent').setStyle('opacity', 0);	
-				}
-				else {
-					$('mainPanel_pad').empty();
-				}
-	
-				this.set('send', {
-					onComplete: function(response) { 
-	 						MUI.updateContent({
-							'element': $('mainPanel'),
-							'content': response,
-							'title': 'Ajax Response',
-							'padding': { top: 8, right: 8, bottom: 8, left: 8 }
-						});			
-					},
-					onSuccess: function(){
-						if (MUI.options.standardEffects == true) {
-							$('postContent').setStyle('opacity', 0).get('morph').start({'opacity': 1});
-						}
+					$('spinner').show();
+					if ($('postContent') && MUI.options.standardEffects == true) {
+						$('postContent').setStyle('opacity', 0);	
 					}
-				});
-				this.send();
-			});		
+					else {
+						$('mainPanel_pad').empty();
+					}
+
+					this.set('send', {
+						onComplete: function(response) { 
+							$('mainPanel').retrieve('instance').set({
+								content: response,
+								title: 'Ajax Response',
+								padding: 8
+							})	
+						},
+						onSuccess: function(){
+							if (MUI.options.standardEffects == true) {
+								$('postContent').setStyle('opacity', 0).get('morph').start({'opacity': 1});
+							}
+						}
+					});
+					this.send();
+				});		
+			}
 		}
 	});
 	
@@ -827,63 +873,64 @@ initializeColumns = function() {
 	new MUI.Panel({
 		id: 'mainPanel',
 		title: 'Lorem Ipsum',
-		contentURL: 'pages/lipsum.html',
+		request: {
+			url: 'pages/lipsum.html' 
+		},
 		column: 'mainColumn',
-		headerToolbox: true,
-		headerToolboxURL: 'pages/toolbox-demo2.html',
-		headerToolboxOnload: function(){
-			if ($('demoSearch')) {
-				$('demoSearch').addEvent('submit', function(e){
-					e.stop();
-					$('spinner').setStyle('visibility', 'visible');
-					if ($('postContent') && MUI.options.standardEffects == true) {
-						$('postContent').setStyle('opacity', 0);
-					}
-					else {
-						$('mainPanel_pad').empty();
-					}
-					this.set('send', {
-						onComplete: function(response){
-							MUI.updateContent({
-								'element': $('mainPanel'),
-								'content': response,
-								'title': 'Ajax Response',
-								'padding': {
-									top: 8,
-									right: 8,
-									bottom: 8,
-									left: 8
-								}
-							});
-						},
-						onSuccess: function(){
-							if ($('postContent') && MUI.options.standardEffects == true) {								
-								$('postContent').setStyle('opacity', 0).get('morph').start({'opacity': 1});
-							}
+		headerToolbox: {
+			request: {
+				url: 'pages/toolbox-demo2.html',
+				onApply: function() {
+					$('demoSearch').addEvent('submit', function(e){
+						e.stop();
+						$('spinner').setStyle('visibility', 'visible');
+						if ($('postContent') && MUI.options.standardEffects == true) {
+							$('postContent').setStyle('opacity', 0);
 						}
+						else {
+							$('mainPanel_pad').empty();
+						}
+						this.set('send', {
+							onComplete: function(response){
+								$('mainPanel').retrieve('instance').set({
+									'content': response,
+									'title': 'Ajax Response'
+								});
+							},
+							onSuccess: function(){
+								if ($('postContent') && MUI.options.standardEffects == true) {								
+									$('postContent').setStyle('opacity', 0).get('morph').start({'opacity': 1});
+								}
+							}
+						});
+						this.send();
 					});
-					this.send();
-				});
+				}
 			}
-		}		
+		}	
 	});
 	
 	new MUI.Panel({
 		id: 'mochaConsole',
 		addClass: 'mochaConsole',
 		title: 'Console',
-		contentURL: 'pages/lipsum.html',
+		request: {
+			url: 'pages/lipsum.html'
+		},
 		column: 'mainColumn',
-		height: 200,	
-		headerToolbox: true,
-		headerToolboxURL: 'pages/console.toolbox.html',
-		headerToolboxOnload: function(){
-			$$('.demoAction').each(function(element){
-				element.removeEvents();
-				element.addEvent('click', function(e){
-					MUI.notification('Do Something');
-				});
-			});
+		height: 200,
+		headerToolbox: {
+			request: {
+				url: 'pages/console.toolbox.html',
+				onApply: function() {
+					$$('.demoAction').each(function(element){
+						element.removeEvents();
+						element.addEvent('click', function(e){
+							MUI.notification('Do Something');
+						});
+					});
+				}
+			}
 		}
 	});
 	
@@ -891,9 +938,15 @@ initializeColumns = function() {
 	
 	new MUI.Panel({
 		id: 'help-panel',
-		contentURL: 'pages/overview.html',
+		request: {
+			url: 'pages/overview.html'
+		},
 		column: 'sideColumn2',
-		tabsURL: 'pages/panel-tabs.html',
+		tabs: {
+			request: {
+				url: 'pages/panel-tabs.html'
+			}
+		},
 		require: {
 			css: [MUI.themePath() + 'css/Tabs.css']
 		}		
@@ -902,7 +955,14 @@ initializeColumns = function() {
 	new MUI.Panel({
 		id: 'panel3',
 		title: 'Panel',
-		contentURL: 'pages/lipsum.html',
+		request: {
+			url: 'pages/lipsum.html'
+		},
+		footer: {
+			request: {
+				url: 'pages/toolbox-demo.html'
+			}
+		},
 		column: 'sideColumn2',
 		height: 120
 	});	
@@ -910,18 +970,23 @@ initializeColumns = function() {
 	new MUI.Panel({
 		id: 'tips-panel',
 		title: 'Tips',
-		contentURL: 'pages/tips.html',
+		request: {
+			url: 'pages/tips.html'
+		},
 		column: 'sideColumn2',
 		height: 140,
-		footer: true,
-		footerURL: 'pages/toolbox-demo.html',
-		footerOnload: function(){
-			$$('.demoAction').each(function(element){
-				element.removeEvents();
-				element.addEvent('click', function(e){
-					MUI.notification('Do Something');
-				});
-			});
+		footer: {
+			request: {
+				url: 'pages/toolbox-demo.html',
+				onApply: function() {
+					$$('.demoAction').each(function(element){
+						element.removeEvents();
+						element.addEvent('click', function(e){
+							MUI.notification('Do Something');
+						});
+					});
+				}
+			}
 		}
 	});
 	
@@ -946,7 +1011,9 @@ initializeColumns = function() {
 			new MUI.Panel({
 				header: false,
 				id: 'splitPanel_mainPanel',
-				contentURL: 'license.html',
+				request: {
+					url: 'license.html',
+				},
 				column: 'mainColumn2'
 			});
 			
@@ -954,7 +1021,9 @@ initializeColumns = function() {
 				header: false,
 				id: 'splitPanel_sidePanel',
 				addClass: 'panelAlt',
-				contentURL: 'pages/lipsum.html',
+				request: {
+					url: 'pages/lipsum.html',
+				},
 				column: 'sideColumn3'
 			});
 		}

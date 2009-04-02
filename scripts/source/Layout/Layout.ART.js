@@ -575,54 +575,28 @@ MUI.Panel = new Class({
 		id:                 null,
 		title:              'New Panel',
 		column:             null,
-		require:            {
-			css:            [],
-			images:         [],
-			js:             [],
-			onload:         null
-		},		
-		loadMethod:         null,
-		contentURL:         null,
-	
-		// xhr options
-		method:             'get',
-		data:               null,
-		evalScripts:        true,
-		evalResponse:       false,
-	
-		// html options
-		content:            'Panel content',
+		require:            {},		
 		
-		// Tabs
-		tabsURL:            null,
-		tabsData:           null,
-		tabsOnload:         $empty,
-
-		header:             true,		
-		headerToolbox:      false,
-		headerToolboxURL:   'pages/lipsum.html',
-		headerToolboxOnload: $empty,		
-
-		footer:             false,
-		footerURL:          'pages/lipsum.html',
-		footerData:         null,
-		footerOnload:       $empty,
+		request: 						{},
+		content: 						null,
 		
-		// Style options:
-		height:             125,
+		header:             true,
+		tabs: 							null,
+		content: 						null,
+		footer:             null,
+		
 		addClass:           '',
 		scrollbars:         true,
-		padding:   		    { top: 8, right: 8, bottom: 8, left: 8 },
+		padding:   		      8,
 		
 		// Other:
 		collapsible:	    true,
 
 		// Events
-		onBeforeBuild:       $empty,
-		onContentLoaded:     $empty,
-		onResize:            $empty,
-		onCollapse:          $empty,
-		onExpand:            $empty
+		//onBeforeBuild:       $empty,
+		//onResize:            $empty,
+		//onCollapse:          $empty,
+		//onExpand:            $empty
 
 	},	
 	initialize: function(options){
@@ -766,80 +740,36 @@ MUI.Panel = new Class({
 		
 		addResizeBottom(options.id);
 		
-		if (options.require.css.length || options.require.images.length){
-			new MUI.Require({
-				css: options.require.css,
-				images: options.require.images,
-				onload: function(){
-					this.newPanel();
-				}.bind(this)		
-			});
-		}		
-		else {
+		if (Hash.getLength(options.require)){
+			console.warn($merge(options.require, {
+				onload: this.newPanel.bind(this)
+			}))
+			new MUI.Require(options.require).chain(this.newPanel.bind(this))
+		} else {
 			this.newPanel();
 		}
 	},
+	
+	set: function(options) {
+		if (options) this.setOptions(options)
+		
+		if (this.options.footer) this.footer = new MUI.Container(this.footerEl, this.footerEl, this.options.footer)
+		if (this.options.headerToolbox) this.headerToolbox = new MUI.Container(this.panelHeaderToolboxEl, this.options.footer)
+		if (this.options.header) this.header = new MUI.Container(this.panelHeaderEl, this.titleEl, $merge({content: this.options.title}, this.options.header), this.options.title)
+		
+		this.content = new MUI.Container(this.panelEl, this.contentEl, this.options)
+	},
+	
 	newPanel: function(){
-		
-		options = this.options;
-		
-		if (options.footer) {			
-			MUI.updateContent({
-				'element': this.panelEl,
-				'childElement': this.footerEl,
-				'loadMethod': 'xhr',
-				'data': options.footerData,
-				'url': options.footerURL,
-				'onContentLoaded': options.footerOnload
-			});			
-		}				
-		
-		if (this.options.headerToolbox) {			
-			MUI.updateContent({
-				'element': this.panelEl,
-				'childElement': this.panelHeaderToolboxEl,
-				'loadMethod': 'xhr',
-				'url': options.headerToolboxURL,
-				'onContentLoaded': options.headerToolboxOnload
-			});
-		}		
-		
-		if (options.tabsURL == null) {
-			this.titleEl.set('html', options.title);
-		} else {
-			this.panelHeaderContentEl.addClass('tabs');
-			MUI.updateContent({
-				'element': this.panelEl,
-				'childElement': this.panelHeaderContentEl,
-				'loadMethod': 'xhr',
-				'url': options.tabsURL,
-				'data': options.tabsData,
-				'onContentLoaded': options.tabsOnload
-			});
-		}		
-		
-		// Add content to panel.
-		MUI.updateContent({
-			'element': this.panelEl,
-			'content': options.content,
-			'method': options.method,
-			'data': options.data,
-			'url': options.contentURL,
-			'onContentLoaded': null,
-			'require': {
-				js: options.require.js,
-				onload: options.require.onload
-			}			
-		});
+		this.set(this.options)
 		
 		// Do this when creating and removing panels
-		$(options.column).getChildren('.panelWrapper').each(function(panelWrapper){
+		$(this.options.column).getChildren('.panelWrapper').each(function(panelWrapper){
 			panelWrapper.getElement('.panel').removeClass('bottomPanel');
 		});
-		$(options.column).getChildren('.panelWrapper').getLast().getElement('.panel').addClass('bottomPanel');
+		$(this.options.column).getChildren('.panelWrapper').getLast().getElement('.panel').addClass('bottomPanel');
 		
-		MUI.panelHeight(options.column, this.panelEl, 'new');
-
+		MUI.panelHeight(this.options.column, this.panelEl, 'new');
 	},
 	collapseToggleInit: function(options){
 
