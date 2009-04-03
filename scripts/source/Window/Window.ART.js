@@ -60,6 +60,7 @@ MUI.Window = new Class({
 	},
 	
 	set: function(options) {
+		console.log(this.element, 'setting', options)
 		/*Fuck, i have something to do with naming. footer & header are taken already*/
 		
 		if (!this.foot)	this.foot = new MUI.Container(this.footer);
@@ -70,6 +71,10 @@ MUI.Window = new Class({
 			footer: this.foot.load(options.footer),
 			header: this.head.load(options.header, options.title)
 		}, this.cont.load(options)))
+	},
+	
+	setContent: function(){
+		return this.set.apply(this, arguments);
 	},
 	
 	show: function() {

@@ -155,7 +155,6 @@ MUI.Container = new Class({
 	},
 	
 	render: function(html) {
-		console.log('rendering', html, this.container)
 		if ($type(html) != 'string' || !html.length) return false;
 		if (this.container) return this.container.empty().set('html', html);
 	},
