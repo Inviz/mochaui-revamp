@@ -37,5 +37,6 @@ ART.Widget.Window.Traited = new Class({
 	
 	setSize: function(x, y) {
 		this.render({width: x, height: y})
+		this.content.setStyles({width: x - 2, height: y - this.footer.offsetHeight - this.header.offsetHeight - 2})
 	}
 })

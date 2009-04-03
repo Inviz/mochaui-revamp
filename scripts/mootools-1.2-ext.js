@@ -31,15 +31,18 @@
 			var params = Array.link(arguments, {options: Object.type, element: Element.type})
 			var traits = this.behaviourise(params.element || params.options)
 			var chain = new Chain
-			using(traits.getKeys(), function() {
+			
+			if (params.options) {
 				var opts = this.prototype.options
 				for (var path in traits.getClean()) opts[$name(path)] = traits.get(path);
+			}
+			using(traits.getKeys(), function() {
 				var klass = new Class({Extends: this, options: opts});
-
 				traits.getKeys().each(function(name) { 
 					name = $name(name).camelCase().capitalize();
+					console.log(name)
 					var trait = this.Traits[name] || this.Base.Traits[name]
-					if (!trait) throw Error("Traite named", name, "is not present")
+					if (!trait) throw Error("Trait named", name, "is not preset")
 					
 					opts = $merge(trait.prototype.options, opts)
 					

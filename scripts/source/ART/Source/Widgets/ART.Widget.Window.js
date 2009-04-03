@@ -121,7 +121,7 @@ ART.Widget.Window = new Class({
 		var absolute = {'position': 'absolute', 'top': 0, 'left': 0};
 		
 		this.paint = new ART.Paint();
-		$(this.paint.toElement()).setStyles(absolute).inject(this.element);
+		$(this.paint).setStyles(absolute).inject(this.element);
 		
 		this.element.setStyles({'position': 'relative'});
 		

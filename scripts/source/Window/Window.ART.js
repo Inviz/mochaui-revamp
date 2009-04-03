@@ -43,7 +43,9 @@ MUI.Window = new Class({
 			console.log('blur')
 		},
 		header: null,
-		footer: null
+		footer: null,
+		
+		resize: false
 	}),
 	
 	initialize: function(options) {
@@ -60,8 +62,7 @@ MUI.Window = new Class({
 	},
 	
 	set: function(options) {
-		console.log(this.element, 'setting', options)
-		/*Fuck, i have something to do with naming. footer & header are taken already*/
+		/*Fuck, i should do something with naming. footer & header are taken already*/
 		
 		if (!this.foot)	this.foot = new MUI.Container(this.footer);
 		if (!this.head) this.head = new MUI.Container(this.header);
@@ -112,3 +113,6 @@ MUI.Window.extend(Traits)
 
 MUI.Window.Behaviour.set('scripts/source/ART/Source/Ext/Widgets/Traits/Draggable.js', false)
 MUI.Window.Behaviour.set('scripts/source/ART/Source/Ext/Widgets/Traits/Resizable.js', false)
+MUI.Window.Behaviour.set('scripts/source/ART/Source/Ext/Widgets/Traits/Animated.js', false)
+MUI.Window.Behaviour.set('scripts/source/ART/Source/Ext/Widgets/Traits/Themeable.js', false)
+MUI.Window.Behaviour.set('scripts/source/ART/Source/Ext/Widgets/Traits/Controllable.js', false)

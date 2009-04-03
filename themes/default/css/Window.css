@@ -36,6 +36,9 @@
   top: 2px;
 }
 
+.art-window .art-window-content {
+  overflow: hidden;
+}
 
 
 

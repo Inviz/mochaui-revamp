@@ -188,6 +188,8 @@ initializeWindows = function(){
 				id: 'parametrics',
 			},
 			title: 'Window Parametrics',
+			controllable: true,
+			animated: true,
 			draggable: true, //these two lines trigger trait to be loaded
 			resizable: true,		
 			request: {
@@ -207,7 +209,6 @@ initializeWindows = function(){
 			},
 			x: 570,
 			y: 160,
-			maximize: false,
 			require: {
 				css: [MUI.path.plugins + 'parametrics/css/style.css'],
 				javascripts: [MUI.path.plugins + 'parametrics/scripts/parametrics.js']
