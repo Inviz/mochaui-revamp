@@ -571,14 +571,11 @@ MUI.Panel = new Class({
 							
 	Implements: [Events, Options],
 	
-	options: {
+	options: $merge(MUI.ContainerOptions, {
 		id:                 null,
 		title:              'New Panel',
 		column:             null,
-		require:            {},		
-		
-		request: 						{},
-		content: 						null,
+		require:            {},
 		
 		header:             true,
 		tabs: 							null,
@@ -598,7 +595,8 @@ MUI.Panel = new Class({
 		//onCollapse:          $empty,
 		//onExpand:            $empty
 
-	},	
+	}),
+		
 	initialize: function(options){
 		this.setOptions(options);
 
@@ -751,13 +749,16 @@ MUI.Panel = new Class({
 	},
 	
 	set: function(options) {
-		if (options) this.setOptions(options)
-		
-		if (this.options.footer) this.footer = new MUI.Container(this.footerEl, this.footerEl, this.options.footer)
-		if (this.options.headerToolbox) this.headerToolbox = new MUI.Container(this.panelHeaderToolboxEl, this.options.footer)
-		if (this.options.header) this.header = new MUI.Container(this.panelHeaderEl, this.titleEl, $merge({content: this.options.title}, this.options.header), this.options.title)
-		
-		this.content = new MUI.Container(this.panelEl, this.contentEl, this.options)
+		if (!this.footer) this.footer = new MUI.Container(this.footer, this.footerEl)
+		if (!this.header) this.header = new MUI.Container(this.panelHeaderEl, this.titleEl)
+		if (!this.headerToolbox) this.headerToolbox = new MUI.Container(this.panelHeaderToolboxEl)
+		if (!this.content) this.content = new MUI.Container(this.panelEl, this.contentEl)
+			
+		this.setOptions($merge({
+			footer: this.footer.load(options.footer),
+			header: this.header.load(options.header, options.title),
+			headerToolbox: this.headerToolbox.load(options.headerToolbox)
+		}, this.content.load(options)))
 	},
 	
 	newPanel: function(){

@@ -45,51 +45,52 @@ var MUI = MochaUI = new Hash({
 
 MUI.files[MUI.path.source + 'Core/Core.js'] = 'loaded';
 
+MUI.ContainerOptions = {
+	data: null,
+	request: null,
+	
+	element: null,
+	iframe: null,
+	attributes: null,
+	container: null,
+	content: null,
+	
+	padding: null
+}
+
 MUI.Container = new Class({
 	
 	Implements: [Events, Options],
 	
-	options: {
-		data: {},
-		element: null,
-		request: {},
-		iframe: null,
-		attributes: false,
-		container: false,
-		padding: {},
-		content: null
+	options: MUI.ContainerOptions,
+	
+	initialize: function(element, container, options) {
+		this.element = $(element)
+		if (!this.element) return
+		this.container = $(container) || new Element('div', {'class': 'container'}).inject(this.element)
+		
+		this.set(options)
+		return this
 	},
 	
-	initialize: function() {
-		var params = Array.link(arguments, {element: Element.type, container: Element.type, options: Object.type, content: String.type})
-		this.element = $(params.element)
-		this.container = params.container || new Element('div', {'class': 'container'}).inject(this.element)
-		console.log(params)
-		this.set(params.options || params.content)
-	},
-	
-	setOptions: function(options) {
-		if (!options) return
+	set: function() {
+		var params = Array.link(arguments, {options: Object.type, content: String.type})
+		if (!Hash.getLength(params)) return
+		if (params.content) params.options = $merge(params.options, {content: params.content})
 		
-		switch($type(options)) {
-			case "string": 
-			case "element":
-				options = {content: options}
-				break
-		}
-		
-		this.parent(options)
-		if (this.options.container) this.container = this.options.container
+		this.setOptions($merge(MUI.ContainerOptions, params.options))
 		this.pad(this.options.padding)
+		
+		return this.act(this.options)
 	},
 	
-	set: function(options) {
-		this.setOptions(options)
-		return this.act(this.options)
-	},	
+	load: function() {
+		this.set.apply(this, arguments)
+		return this.options
+	},
 	
 	pad: function(padding) {
-		if (!padding) return
+		if (!$chk(padding)) return
 		
 		switch($type(padding)) {
 			case "number": case "string":
@@ -105,57 +106,72 @@ MUI.Container = new Class({
 		return this.append(this.options.element || this.options.content) || 
 			this.build(this.options.attributes) || 
 			this.render(this.options.content) ||
-			this.request(this.options.request) 
+			this.request(this.options.request) ||
+			this.browse(this.options.iframe)
+	},
+	
+	browse: function(iframe) {
+		if (!iframe) return false;
+		switch($type(this.options.iframe)) {
+			case "string": 
+				this.options.iframe = {src: this.options.iframe};
+			case "element":
+				this.iframe = this.options.iframe;
+			default:
+				if (!this.iframe) this.iframe = new IFrame(this.options.iframe);
+		}
+		
+		return this.iframe.inject(this.container.empty());
 	},
 	
 	append: function(element) {
-		if (!$type(element) != "element") return false
-		this.element.adopt(element)
-		this.update()
-		return element 
+		if (!$type(element) != "element") return false;
+		this.element.adopt(element);
+		this.update();
+		return element;
 	},
 	
 	request: function(options) {	
-		if (!options || !options.url) return false
-		this.xhr = new Request($merge({method: "get"}, options))
-		this.xhr.addEvent('success', this.recieve.bind(this))
-		return this.xhr.send()
+		if (!options || !options.url) return false;
+		this.xhr = new Request($merge({method: "get"}, options));
+		this.xhr.addEvent('success', this.recieve.bind(this));
+		return this.xhr.send();
 	},
 	
 	render: function(html) {
-		if ($type(html) != 'string' || !html.length) return false
-		return this.container.empty().set('html', html)
+		if ($type(html) != 'string' || !html.length) return false;
+		if (this.container) return this.container.empty().set('html', html);
 	},
 	
 	build: function(attributes) {
-		if ($type(attributes) != 'object') return false
-		return this.append(new Element(attributes.tag || 'div', attributes))
+		if ($type(attributes) != 'object') return false;
+		return this.append(new Element(attributes.tag || 'div', attributes));
 	},
 	
 	update: function() {
-		this.fireEvent('contentLoaded', this.element)
+		this.fireEvent('contentLoaded', this.element);
 	},
 	
 	recieve: function(html) {
-		this.render(html)
-		this.xhr.fireEvent('apply')
+		this.render(html);
+		this.xhr.fireEvent('apply');
 	}
 	
 });
 
 $initialize = function(options) {
-	return new this(options)
-}
+	return new this(options);
+};
 
-MUI.Container.create = $initialize
+MUI.Container.create = $initialize;
 
 Element.implement({
 	setContent: function(content) {
-		var controller = this.retrieve('content:controller') || new MUI.Container(this)
-		this.store('content:controller', controller)
-		return controller.set(content)
+		var controller = this.retrieve('content:controller') || new MUI.Container(this);
+		this.store('content:controller', controller);
+		return controller.set(content);
 	}
-})
+});
 
 
 

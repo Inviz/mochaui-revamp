@@ -17,7 +17,7 @@ MUI.Windows.windowOptionsOriginal = $merge(MUI.Windows.windowOptions);
 MUI.Window = new Class({
 	Extends: ART.Window.Extended,
 	
-	options: {
+	options: $merge(MUI.ContainerOptions, {
 		id:                null,
 		
 		icon:              false,
@@ -41,10 +41,8 @@ MUI.Window = new Class({
 			console.log('blur')
 		},
 		header: null,
-		footer: null,
-		request: {},
-		content: null
-	},
+		footer: null
+	}),
 	
 	initialize: function(options) {
 		this.parent(options);
@@ -61,13 +59,16 @@ MUI.Window = new Class({
 	},
 	
 	set: function(options) {
-		if (options) this.setOptions(options)
-		
 		/*Fuck, i have something to do with naming. footer & header are taken already*/
-		if (this.options.footer) this.foot = new MUI.Container(this.footer, this.options.footer)
-		if (this.options.header) this.head = new MUI.Container(this.header, $merge({content: this.options.title}, this.options.header))
 		
-		this.cont = new MUI.Container(this.content, this.options)
+		if (!this.foot)	this.foot = new MUI.Container(this.footer);
+		if (!this.head) this.head = new MUI.Container(this.header);
+		if (!this.cont) this.cont = new MUI.Container(this.content);
+		
+		this.setOptions($merge(options, {
+			footer: this.foot.load(options.footer),
+			header: this.head.load(options.header, options.title)
+		}, this.cont.load(options)))
 	},
 	
 	show: function() {

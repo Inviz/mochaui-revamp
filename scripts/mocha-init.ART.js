@@ -104,10 +104,8 @@ initializeWindows = function(){
 		new MUI.Window({
 			id: 'youtube',
 			title: 'YouTube in Iframe',
-			content: {
-				iframe: {
-					src: 'pages/youtube.html'
-				}
+			iframe: {
+				src: 'pages/youtube.html'
 			},
 			width: 340,
 			height: 280,
@@ -767,8 +765,8 @@ initializeColumns = function() {
 				$('youtube4Link').addEvent('click', function(e){
 					$('mainPanel').retrieve('instance').set({
 						title: 'IFrame: YouTube',
-						request: {
-							url: 'pages/youtube.html',
+						iframe: {
+							src: 'pages/youtube.html',
 						},
 						padding: 0
 					})
