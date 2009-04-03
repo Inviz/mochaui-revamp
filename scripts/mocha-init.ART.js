@@ -107,6 +107,7 @@ initializeWindows = function(){
 			iframe: {
 				src: 'pages/youtube.html'
 			},
+			padding: 0,
 			style: {
 				width: 340,
 				height: 280

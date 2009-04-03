@@ -121,7 +121,14 @@ MUI.Container = new Class({
 				this.iframe = this.options.iframe;
 			default:
 				if (!this.iframe) {
-					this.iframe = new IFrame($merge({styles: {border: 0, display: 'block'}}, this.options.iframe))
+					this.iframe = new IFrame($merge({
+						styles: {
+							border: 0, 
+							display: 'block',
+							width: "100%",
+							height: this.element.scrollHeight
+						}
+					}, this.options.iframe))
 				} else {
 					var options = $merge(this.options.iframe) || {}
 					if (options.src == this.iframe.src) delete options.src //do not set same src to avoid refreshing
