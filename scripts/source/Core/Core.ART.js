@@ -102,12 +102,12 @@ MUI.Container = new Class({
 		}
 	},
 	
-	act: function() {
-		return this.append(this.options.element || this.options.content) || 
-			this.build(this.options.attributes) || 
-			this.render(this.options.content) ||
-			this.request(this.options.request) ||
-			this.browse(this.options.iframe)
+	act: function(options) {
+		return this.append(options.element || options.content) || 
+			this.build(options.attributes) || 
+			this.render(options.content) ||
+			this.request(options.request) ||
+			this.browse(options.iframe)
 	},
 	
 	browse: function(iframe) {

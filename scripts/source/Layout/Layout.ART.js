@@ -749,11 +749,11 @@ MUI.Panel = new Class({
 	},
 	
 	set: function(options) {
-		if (!this.footer) this.footer = new MUI.Container(this.footer, this.footerEl)
+		if (!this.footer) this.footer = new MUI.Container(this.footerWrapperEl, this.footerEl)
 		if (!this.header) this.header = new MUI.Container(this.panelHeaderEl, this.titleEl)
 		if (!this.headerToolbox) this.headerToolbox = new MUI.Container(this.panelHeaderToolboxEl)
 		if (!this.content) this.content = new MUI.Container(this.panelEl, this.contentEl)
-			
+		
 		this.setOptions($merge({
 			footer: this.footer.load(options.footer),
 			header: this.header.load(options.header, options.title),
