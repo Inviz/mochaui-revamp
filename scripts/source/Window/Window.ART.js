@@ -24,11 +24,13 @@ MUI.Window = new Class({
 		require:           {},
 		closeAfter:        false,
 		
+		x: 								 0,
+		y:                 0,	
+		
 		container:         null,
 		restrict:          true,
 		
 		onShow: function() {
-			console.log('show')
 			ART.WM.include(this)
 			this.blur()
 		},
@@ -54,8 +56,7 @@ MUI.Window = new Class({
 		} else {
 			this.show();
 		}
-		
-		this.set(options)
+		this.set(options);
 	},
 	
 	set: function(options) {
@@ -87,8 +88,8 @@ MUI.Window = new Class({
 		
 		$(this).inject(this.options.container || document.body).setStyles({
 			position: 'absolute',
-			top: 0,
-			left: 0,
+			left: this.options.x,
+			top: this.options.y,
 			zIndex: 250
 		})
 	},

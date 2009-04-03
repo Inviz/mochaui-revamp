@@ -107,8 +107,10 @@ initializeWindows = function(){
 			iframe: {
 				src: 'pages/youtube.html'
 			},
-			width: 340,
-			height: 280,
+			style: {
+				width: 340,
+				height: 280
+			},
 			resizeLimit: {'x': [330, 2500], 'y': [250, 2000]},
 			toolbar: {
 				request: {
@@ -737,14 +739,13 @@ initializeColumns = function() {
 		column: 'sideColumn1',
 		require: {
 			css: [MUI.path.plugins + 'tree/css/style.css'],			
-			javascripts: [MUI.path.plugins + 'tree/scripts/tree.js'],
-			onload: function(){
-				if (buildTree) buildTree('tree1');
-			}.create({delay: 50})
+			javascripts: [MUI.path.plugins + 'tree/scripts/tree.js']
 		},
 		request: {
 			url: 'pages/file-view.html',
-			onApply: function(){		
+			onApply: function(){	
+				if (buildTree) buildTree('tree1');
+					
 				$('notesLink').addEvent('click', function(e){
 					$('mainPanel').retrieve('instance').set({
 						request: {
