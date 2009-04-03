@@ -1,56 +1,4 @@
-ART.Theme = {}
-ART.Theme.Aqua = {
-	style: {
-		base: {
-			
-			'height': 300,
-			'width': 400,
-			
-			'button-margin': 20,
-			'button-top': 5,
-			
-			'corner-radius': 3,
-			'header-height': 24,
-			'footer-height': 16,
-			'header-background-color': {0: hsb(0, 0, 90), 1: hsb(0, 0, 60)},
-			'footer-background-color': {0: hsb(0, 0, 80), 1: hsb(0, 0, 70)},
-			'header-reflection-color': {0: hsb(0, 0, 100, 1), 1: hsb(0, 0, 0, 0)},
-			'footer-reflection-color': {0: hsb(0, 0, 100, 1), 1: hsb(0, 0, 0, 0)},
-			'border-color': hsb(300, 0, 50, 0.8)
-		},
-		
-		focused: {
-			'button-margin': 20,
-			'button-top': 5,
-
-			'corner-radius': 3,
-			'header-height': 24,
-			'footer-height': 16,
-			'border-color': hsb(300, 0, 10, 0.8)
-		}
-	}
-}
-
-ART.Window.extend(Traits)
-ART.Window.Traits.Draggable = new Class({
-	options: {
-		draggable: true
-	},
-	
-	initialize: function(options) {
-		this.parent(options)
-		if (this.options.draggable) this.makeDraggable()
-	},
-
-	makeDraggable: function(){
-		if (this.madeDraggable) return;
-		this.madeDraggable = true;
-
-		new Drag.Move(this.element, {handle: [this.header, this.footer]});
-	}
-})
-
-ART.Window.Traits.Resizable = new Class({
+ART.Widget.Window.Traits.Resizable = new Class({
 	options: {
 		resizable: true
 	},
@@ -127,9 +75,3 @@ ART.Window.Traits.Resizable = new Class({
 
 	},
 })
-
-ART.Window.Extended = new Class($merge(ART.Theme.Aqua, {
-	Extends: ART.Window,
-
-	Inherits: ART.Window.Traits.Draggable
-}))

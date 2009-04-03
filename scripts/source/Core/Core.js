@@ -660,7 +660,6 @@ MUI.Require = new Class({
 	
 	load: function(kind, file) {
 		if (kind == 'images') kind = 'image'
-			console.info('loading', file, kind)
 		return function() {
 			return Assset[kind]({
 				src: file, 

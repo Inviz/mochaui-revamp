@@ -1,8 +1,13 @@
-// art.window.js
+/*
+Script: ART.Widget.Window.js
+
+License:
+	MIT-style license.
+*/
 
 // Window Widget. Work in progress.
 
-ART.Window = new Class({
+ART.Widget.Window = new Class({
 	
 	Extends: ART.Widget,
 	
@@ -116,7 +121,7 @@ ART.Window = new Class({
 		var absolute = {'position': 'absolute', 'top': 0, 'left': 0};
 		
 		this.paint = new ART.Paint();
-		$(this.paint).setStyles(absolute).inject(this.element);
+		$(this.paint.toElement()).setStyles(absolute).inject(this.element);
 		
 		this.element.setStyles({'position': 'relative'});
 		
@@ -130,45 +135,26 @@ ART.Window = new Class({
 		
 		this.element.adopt(this.header, this.content, this.footer);
 		
-		this.buttons = {}
 		if (this.options.close){
-			this.buttons.close = new ART.Button({style: this.options.closeStyle});
-			$(this.buttons.close).setStyles(absolute).inject(this.header);
+			this.close = new ART.Widget.Button({style: this.options.closeStyle});
+			$(this.close).setStyles(absolute).inject(this.header);
 		}
 		
 		if (this.options.maximize){
-			this.buttons.maximize = new ART.Button({style: this.options.maximizeStyle});
-			$(this.buttons.maximize).setStyles(absolute).inject(this.header);
+			this.maximize = new ART.Widget.Button({style: this.options.maximizeStyle});
+			$(this.maximize).setStyles(absolute).inject(this.header);
 		}
 		
 		if (this.options.minimize){
-			this.buttons.minimize = new ART.Button({style: this.options.minimizeStyle});
-			$(this.buttons.minimize).setStyles(absolute).inject(this.header);
+			this.minimize = new ART.Widget.Button({style: this.options.minimizeStyle});
+			$(this.minimize).setStyles(absolute).inject(this.header);
 		}
 		
 		this.render();
 	},
 	
-	setContent: function(parts){
-		var setter = function(element, content) {
-			var elements = $$($(content)||content);
-			if (elements.length) element.empty().adopt(elements)
-			else element.set('html', content);
-		}
-		if ($type(parts) == "object") {
-		/*	{
-				header: 'hi there',
-				content: [DOM Element],
-				footer: <html string>
-			} */
-			$each(parts, function(content, part) {
-				setter(this[part], content);
-			}, this);
-		} else {
-			$A(arguments).each(function(arg) {
-				setter(this.content, content);
-			}, this);
-		}
+	setContent: function(){
+		this.content.adopt(arguments);
 		return this;
 	},
 	
@@ -209,20 +195,16 @@ ART.Window = new Class({
 		
 		if (this.options.resize){
 			
+			var drawLines = function(self){
+				self.paint.lineBy({x: -10, y: 10}).moveBy({x: 4, y: 0}).lineBy({x: 6, y: -6}).moveBy({x: 0, y: 4}).lineBy({x: -2, y: 2});
+			};
+			
 			this.paint.start({x: now.width - 4, y: now.height - 14});
-			this.paint.lineBy({x: -10, y: 10});
-			this.paint.moveBy({x: 4, y: 0});
-			this.paint.lineBy({x: 6, y: -6});
-			this.paint.moveBy({x: 0, y: 4});
-			this.paint.lineBy({x: -2, y: 2});
+			drawLines(this);
 			this.paint.end({'stroke': true, 'stroke-color': hsb(0, 0, 100, 0.6)});
 			
 			this.paint.start({x: now.width - 5, y: now.height - 14});
-			this.paint.lineBy({x: -10, y: 10});
-			this.paint.moveBy({x: 4, y: 0});
-			this.paint.lineBy({x: 6, y: -6});
-			this.paint.moveBy({x: 0, y: 4});
-			this.paint.lineBy({x: -2, y: 2});
+			drawLines(this);
 			this.paint.end({'stroke': true, 'stroke-color': hsb(0, 0, 0, 0.6)});
 		}
 		
@@ -232,14 +214,14 @@ ART.Window = new Class({
 		var oneLeft = baseLeft + now.buttonMargin;
 		var twoLeft = oneLeft + oneLeft - baseLeft;
 		
-		if (this.buttons.close) $(this.buttons.close).setStyles({top: now.buttonTop, left: baseLeft});
+		if (this.close) $(this.close).setStyles({top: now.buttonTop, left: baseLeft});
 		
-		if (this.buttons.maximize) $(this.buttons.maximize).setStyles({
+		if (this.maximize) $(this.maximize).setStyles({
 			top: now.buttonTop,
 			left: (this.close && this.maximize) ? twoLeft : (this.close || this.maximize) ? oneLeft : baseLeft
 		});
 		
-		if (this.buttons.minimize) $(this.buttons.minimize).setStyles({
+		if (this.minimize) $(this.minimize).setStyles({
 			top: now.buttonTop,
 			left: (this.close) ? oneLeft : baseLeft
 		});

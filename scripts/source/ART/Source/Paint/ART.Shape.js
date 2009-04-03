@@ -1,11 +1,36 @@
-// art.paint.js
+/*
+Script: ART.Shape.js
 
-// ART.Paint Class
+License:
+	MIT-style license.
+*/
 
-ART.Paint = new Class({
-	
-	Extends: ART.Adapter.Canvas,
-	
+// ART.Shape Class stub.
+// Will probably support defining shapes as json at some point.
+// Right now, its just functions.
+
+ART.Shape = function(shape){
+	return shape;
+};
+
+ART.Paint.defineShape = function(name, shape){
+	ART.Shape[name.camelCase()] = new ART.Shape(shape);
+	return this;
+};
+
+ART.Paint.defineShapes = function(shapes){
+	for (var shape in shapes) this.defineShape(shape, shapes[shape]);
+	return this;
+};
+
+ART.Paint.lookupShape = function(name){
+	return ART.Shape[name.camelCase()];
+};
+
+// connect to ART.Paint
+
+ART.Paint.implement({
+
 	shape: function(shape){
 		var args = Array.slice(arguments, 1);
 		if (typeof shape == 'string') shape = ART.Paint.lookupShape(shape.camelCase());
@@ -17,74 +42,12 @@ ART.Paint = new Class({
 	
 });
 
-(function(){
-	
-	var shapes = {};
-
-	ART.Paint.defineShape = function(name, shape){
-		shapes[name.camelCase()] = shape;
-		return this;
-	};
-	
-	ART.Paint.defineShapes = function(shapes){
-		for (var shape in shapes) this.defineShape(shape, shapes[shape]);
-		return this;
-	};
-
-	ART.Paint.lookupShape = function(name){
-		return shapes[name.camelCase()];
-	};
-	
-})();
-
-// kappa!
-
-Math.kappa = (4 * (Math.sqrt(2) - 1) / 3);
-
-// default paths
-
-ART.Paint.implement({
-	
-	roundCapLeftTo: function(vector){
-		vector = this.vector(vector);
-		return this.roundCapLeftBy({x: vector.x - this.now.x, y: vector.y - this.now.y});
-	},
-	
-	roundCapRightTo: function(vector){
-		vector = this.vector(vector);
-		return this.roundCapRightBy({x: vector.x - this.now.x, y: vector.y - this.now.y});
-	},
-
-	roundCapLeftBy: function(end){
-		var kappa = {x: end.x * Math.kappa, y: end.y * Math.kappa};
-		this.bezierBy({x: 0, y: kappa.y}, {x: end.x - kappa.x, y: end.y}, end);
-		return this;
-	},
-	
-	roundCapRightBy: function(end){
-		var kappa = {x: end.x * Math.kappa, y: end.y * Math.kappa};
-		this.bezierBy({x: kappa.x, y: 0}, {x: end.x, y: end.y - kappa.y}, end);
-		return this;
-	}
-
-});
-
 // default shapes
 
 ART.Paint.defineShapes({
 
 	rectangle: function(end){
 		this.lineBy({x: end.x, y: 0}).lineBy({x: 0, y: end.y}).lineBy({x: -end.x, y: 0}).lineBy({x: 0, y: -end.y});
-	},
-	
-	roundCapLeft: function(end){
-		var kappa = {x: end.x * Math.kappa, y: end.y * Math.kappa};
-		this.bezierBy({x: 0, y: kappa.y}, {x: end.x - kappa.x, y: end.y}, end);
-	},
-	
-	roundCapRight: function(end){
-		var kappa = {x: end.x * Math.kappa, y: end.y * Math.kappa};
-		this.bezierBy({x: kappa.x, y: 0}, {x: end.x, y: end.y - kappa.y}, end);
 	},
 	
 	ellipse: function(end){

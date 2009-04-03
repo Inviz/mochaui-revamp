@@ -15,7 +15,7 @@ MUI.extend({
 MUI.Windows.windowOptionsOriginal = $merge(MUI.Windows.windowOptions);
 
 MUI.Window = new Class({
-	Extends: ART.Window.Extended,
+	Extends: ART.Widget.Window.Traited,
 	
 	options: $merge(MUI.ContainerOptions, {
 		id:                null,
@@ -92,14 +92,14 @@ MUI.Window = new Class({
 			top: this.options.y,
 			zIndex: 250
 		})
-	},
-	
-	maximize: function() {
-		this.fireEvent('maximize');
-	},
-	
-	minimize: function() {
-		this.fireEvent('minimize');
-	}
-	
+	}//,
+	//
+	//maximize: function() {
+	//	this.fireEvent('maximize');
+	//},
+	//
+	//minimize: function() {
+	//	this.fireEvent('minimize');
+	//}
+	//
 })
