@@ -68,6 +68,9 @@ MUI.Container = new Class({
 		this.element = $(element)
 		if (!this.element) return
 		this.container = $(container) || new Element('div', {'class': 'container'}).inject(this.element)
+		this.padding = Hash.map({'top': 0, 'right': 0, 'bottom': 0, 'left': 0}, function(value, key) {
+			return this.container.getStyle('padding-' + key) || value
+		}, this)
 		
 		this.set(options)
 		return this
@@ -77,8 +80,8 @@ MUI.Container = new Class({
 		var params = Array.link(arguments, {options: Object.type, content: String.type})
 		if (!Hash.getLength(params)) return
 		if (params.content) params.options = $merge(params.options, {content: params.content})
-		
-		this.setOptions($merge(MUI.ContainerOptions, params.options))
+
+		this.setOptions($merge(MUI.ContainerOptions, {padding: this.padding}, params.options))
 		this.pad(this.options.padding)
 		
 		return this.act(this.options)
@@ -103,11 +106,10 @@ MUI.Container = new Class({
 	},
 	
 	act: function(options) {
-		return this.append(options.element || options.content) || 
-			this.build(options.attributes) || 
-			this.render(options.content) ||
-			this.request(options.request) ||
-			this.browse(options.iframe)
+		//first set static stuff
+		var result = this.append(options.element || options.content) || this.build(options.attributes) || this.render(options.content)
+		//second do a request if needed
+		return this.request(options.request) || this.browse(options.iframe) || result
 	},
 	
 	browse: function(iframe) {
@@ -118,10 +120,17 @@ MUI.Container = new Class({
 			case "element":
 				this.iframe = this.options.iframe;
 			default:
-				if (!this.iframe) this.iframe = new IFrame(this.options.iframe);
+				if (!this.iframe) {
+					this.iframe = new IFrame($merge({styles: {border: 0}}, this.options.iframe))
+				} else {
+					var options = $merge(this.options.iframe) || {}
+					if (options.src == this.iframe.src) delete options.src //do not set same src to avoid refreshing
+					this.iframe.set(this.options.iframe)
+				}
 		}
 		
-		return this.iframe.inject(this.container.empty());
+		if (this.iframe.getParent() != this.container) this.iframe.inject(this.container.empty());
+		return this.iframe;
 	},
 	
 	append: function(element) {
