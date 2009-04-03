@@ -108,3 +108,7 @@ MUI.Window = new Class({
 	//}
 	//
 })
+MUI.Window.extend(Traits)
+
+MUI.Window.Behaviour.set('scripts/source/ART/Source/Ext/Widgets/Traits/Draggable.js', false)
+MUI.Window.Behaviour.set('scripts/source/ART/Source/Ext/Widgets/Traits/Resizable.js', false)

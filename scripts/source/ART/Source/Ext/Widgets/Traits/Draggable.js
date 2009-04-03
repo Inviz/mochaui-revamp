@@ -1,6 +1,9 @@
 ART.Widget.Window.Traits.Draggable = new Class({
 	options: {
-		draggable: true
+		/*
+		onDragStart
+		onDragFinish
+		*/
 	},
 	
 	initialize: function(options) {
@@ -11,9 +14,9 @@ ART.Widget.Window.Traits.Draggable = new Class({
 	makeDraggable: function(){
 		if (this.madeDraggable) return;
 		this.madeDraggable = true;
-
+		
 		new Drag.Move(this.element, {
-			handle: [this.header, this.footer],
+			handle: [this.header],
 			onStart: Event.propagate(this, 'dragStart'),
 			onFinish: Event.propagate(this, 'dragFinish')
 		});

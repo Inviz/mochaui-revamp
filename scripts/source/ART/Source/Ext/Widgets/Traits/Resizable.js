@@ -1,18 +1,26 @@
 ART.Widget.Window.Traits.Resizable = new Class({
 	options: {
-		resizable: true
+		/*
+		onResizeStart
+		onResizeFinish
+		onSizeChange	
+		*/
+		limit: { 
+			x: [50, 500],
+			y: [50, 500]
+		}
 	},
 	
 	initialize: function(options) {
 		this.parent(options)
-		this.addEvent('inject', function() {
+		this.addEvent('show', function() {
 			this.computeSizes()
 			if (this.options.resizable) this.makeResizable()
 		}.bind(this))
 	},
 	
 	computeSizes: function(){
-		var tbh = this.header.offsetHeight + this.footer.offsetHeight, lim = this.options.limit;
+		var tbh = this.header.offsetHeight + this.footer.offsetHeight, lim = this.options.limit
 		this.minh = lim.y[0] + tbh;
 		this.maxh = lim.y[1] + tbh;
 		this.minw = lim.x[0];
@@ -42,36 +50,46 @@ ART.Widget.Window.Traits.Resizable = new Class({
 		this.mask = new Element('div', {styles: {
 			position: 'absolute',
 			display: 'none'
-		}}).inject(this.container);
+		}}).inject(this.content);
+		
+		this.handle = new Element('div', {
+			'class': 'handle',
+			styles: {
+				position: 'absolute'
+			}
+		}).inject(this.footer);
 		
 		var self = this;
 
-		new Drag(this.element, {
+		this.resizability = new Drag(this.element, $merge({
 			limit: {x: [this.minw, this.maxw], y: [this.minh, this.maxh]},
 			modifiers: {x: 'width', y: 'height'},
+			handle: this.handle
+		}, this.options.resizable)).addEvents({
 			onBeforeStart: function(){
-				self.showMask();
+				//self.showMask();
 			},
 			onStart: function(){
-				if (!self.options.showContentWhileResizing) self.hideCenter();
-				self.hideOverflow();
+				console.log('start')
+				//if (!self.options.showContentWhileResizing) self.hideCenter();
+				//self.hideOverflow();
 			},
 			onCancel: function(){
-				self.hideMask();
+				//self.hideMask();
 			},
 			onDrag: function(){
-				self.remask(false);
+				//self.remask(false);
+				self.setSize(self.resizability.value.now.x, self.resizability.value.now.y)
 				self.fireEvent('onSizeChange');
 			},
 			onComplete: function(){
-				self.showCenter();
-				self.showOverflow();
-				self.remask(true);
-				self.hideMask();
+				//self.showCenter();
+				//self.showOverflow();
+				//self.remask(true);
+				//self.hideMask();
 				self.fireEvent('onSizeChange');
-			},
-			handle: this.handle
-		});
+			}
+		})
 
 	},
 })

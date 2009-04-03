@@ -1,66 +1,92 @@
-Class.Mutators.Inherits = function(self, klasses){
-	$splat(klasses).each(function(klass){
-		Class.prototyping = klass.prototype;
-		var subclass = new klass;
-		delete subclass.parent;
-		self = Class.inherit(self.prototype || self, subclass)
-		delete Class.prototyping;
-	});
-	return self;
-};
-
-Behavioured = {
-	behaviourise: function(element) {
-		var result = new Hash
-		this.Behaviour.each(function(selector, dependency) {
-			var name = dependency.replace(/^.+?-/, '')
-			if (element.hasClass(name) || (selector && (element.match(selector) || element.getElement(selector)))) result.set(dependency, name)
-		}, this)
-		return result
-	},
+(function() {
+	var $name = function(path) {
+		return path.replace(/.js$/, '').replace(/^.+?-/, '').split('/').getLast().toLowerCase()
+	}
 	
-	Behaviour: new Hash,
-	Traits: new Hash
-};
+	Behavioured = {
+		behaviourise: function(object) {
+			var result = new Hash
+			this.Behaviour.each(function(selector, dependency) {
+				var name = $name(dependency)
+				switch ($type(object)) {
+					case "element":
+						var decision = !!(element.hasClass(name) || (selector && (element.match(selector) || element.getElement(selector))))
+					case "object": case "hash":
+						var decision = Hash.get(object, name)
+				}
+				if (!decision) return
 
-Traits = $merge({
-	create: function(element, a,b,c,d) {
-		var traits = this.behaviourise(element)
-		var chain = new Chain
-		using(traits.getKeys(), function() {
-			var klass = new Class({
-				Extends: this,
-				Inherits: traits.getValues().map(function(name) { 
-					name = name.camelCase().capitalize();
-					return this.Traits[name] || this.Base.Traits[name]
-				}.bind(this))
-			})
-			var instance = new klass(element, a,b,c,d)
-			console.log('Created', instance, 'of', klass, 'for', element, 'traits are', traits.getKeys())
-			chain.callChain(instance)
-		}.create({bind: this, delay: 10}))
-		
-		return chain
-	}
-}, Behavioured)
+				if ($type(decision) == "object") name = $extend(decision, {name: name})
+				result.set(dependency, decision)
+			}, this)
+			return result
+		},
 
-Types = $merge({
-	create: function(element, a,b,c,d) {
-		var candidates = this.behaviourise(element)
-		var candidate = candidates.getKeys()[0]
-		if (candidate) {
-			using(candidate, function() {
-				var name = candidates.get(candidate)
-				var klass = this[name.camelCase().capitalize()]
-				console.log('Chose', klass, ', type is', name)
-				klass.Base = this //make subclass aware of parent
-				klass.create(element, a,b,c,d)
-			}.bind(this))
-		} else {
-			new this(element, a,b,c,d)
+		Behaviour: new Hash,
+		Traits: new Hash
+	};
+
+	Traits = $merge({
+		create: function(a,b,c,d,e) {
+			var params = Array.link(arguments, {options: Object.type, element: Element.type})
+			var traits = this.behaviourise(params.element || params.options)
+			var chain = new Chain
+			using(traits.getKeys(), function() {
+				var opts = this.prototype.options
+				for (var path in traits.getClean()) opts[$name(path)] = traits.get(path);
+				var klass = new Class({Extends: this, options: opts});
+
+				traits.getKeys().each(function(name) { 
+					name = $name(name).camelCase().capitalize();
+					var trait = this.Traits[name] || this.Base.Traits[name]
+					if (!trait) throw Error("Traite named", name, "is not present")
+					
+					opts = $merge(trait.prototype.options, opts)
+					
+					var proto = Class.instantiate(trait)
+					proto.Extends = klass
+					klass = new Class(proto)
+				}, this);
+				
+				klass.prototype.options = opts
+				
+				var instance = new klass(a, b, c, d, e)
+				console.log('Created', instance, 'of', klass, 'for', params.element, 'traits are', traits.getKeys())
+				chain.callChain(instance)
+			}.create({bind: this, delay: 10}))
+
+			return chain
 		}
-	}
-}, Behavioured)
+	}, Behavioured)
+
+	Types = $merge({
+		create: function(a,b,c,d,e) {
+			var params = Array.link(arguments, {options: Object.type, element: Element.type})
+			var candidates = this.behaviourise(params.element || params.options)
+
+			if ($type(candidates) == 'object') candidates = new Hash(candidates)
+			var candidate = candidates.getKeys()[0]
+			if (candidate) {
+				using(candidate, function() {
+					var name = candidates.get(candidate)
+					var klass = this[name.camelCase().capitalize()]
+					klass.Base = this //make subclass aware of parent
+					klass.create(element, a,b,c,d)
+				}.bind(this))
+			} else {
+				new this(element, a,b,c,d)
+			}
+		}
+	}, Behavioured);
+})();
+
+
+//mui.require emulation
+var using = function() {
+	var options = {javascripts: $A(arguments).flatten()}
+	if (options.javascripts.getLast().run) options.onload = options.javascripts.pop()
+	return new MUI.Require(options)
+}
 
 
 

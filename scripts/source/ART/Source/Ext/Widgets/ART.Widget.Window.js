@@ -34,6 +34,8 @@ ART.Themes.Mocha = {
 ART.Widget.Window.extend(Traits)
 ART.Widget.Window.Traited = new Class({
 	Extends: ART.Widget.Window,
-
-	//Inherits: ART.Widget.Window.Traits.Draggable
+	
+	setSize: function(x, y) {
+		this.render({width: x, height: y})
+	}
 })

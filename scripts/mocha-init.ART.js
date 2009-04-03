@@ -183,11 +183,13 @@ initializeWindows = function(){
 	}	
 	
 	MUI.parametricsWindow = function(){	
-		new MUI.Window({
+		MUI.Window.create({
 			data: {
 				id: 'parametrics',
 			},
-			title: 'Window Parametrics',			
+			title: 'Window Parametrics',
+			draggable: true, //these two lines trigger trait to be loaded
+			resizable: true,		
 			request: {
 				url: MUI.path.plugins + 'parametrics/index.html',
 				onApply: function(){	
@@ -205,7 +207,6 @@ initializeWindows = function(){
 			},
 			x: 570,
 			y: 160,
-			resizable: false,
 			maximize: false,
 			require: {
 				css: [MUI.path.plugins + 'parametrics/css/style.css'],

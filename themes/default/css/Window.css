@@ -29,6 +29,13 @@
   padding: 0 5px;
 }
 
+.art-window .art-window-footer .handle {
+  right: 11px;
+  height: 15px;
+  width: 15px;
+  top: 2px;
+}
+
 
 
 
