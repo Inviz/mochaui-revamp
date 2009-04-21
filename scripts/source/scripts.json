@@ -1,0 +1,42 @@
+{
+	
+	"Core": {
+	
+		"Core.Art": {
+			"desc": "Core mocha ui stuff. Contains MUI namespace definition"						
+		}
+		
+	},
+	
+	"Window": {
+	
+		"Window.ART": {
+			"deps": ["Art.Widgets.Window", "Core.Art"],
+			"desc": "Window class built upon mootools art."
+		},
+		
+		"WindowManager": {
+			"deps": ["Window"],
+			"desc": "Simple window manager to resolve z-index issues and fire blur/fire events."
+		}
+		
+	},
+	
+	"Layout": {
+		
+		"Layout.ART": {
+			"deps": ["Core.ART"],
+			"deps": "Panels, columns and desktops you love."
+		},
+		
+		"Dock": {
+			"desc": "More like taskbar actually."
+		},
+		
+		"Workspaces": {
+			"desc": "Like saving all stuff to load in future."
+		}
+		
+	}
+	
+}

@@ -45,7 +45,8 @@ MUI.Window = new Class({
 		header: null,
 		footer: null,
 		
-		resize: false
+		resize: false,
+		draggable: true
 	}),
 	
 	initialize: function(options) {

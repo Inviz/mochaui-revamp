@@ -290,7 +290,7 @@ MUI.Dock = {
 		}).inject($('dockClear'), 'before');
 		
 		dockTab.addEvent('mousedown', function(e){
-			new Event(e).stop();
+			e.stop();
 			this.timeDown = $time();
 		});
 		

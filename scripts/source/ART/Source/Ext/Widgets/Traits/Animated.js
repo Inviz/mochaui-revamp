@@ -1,5 +1,8 @@
 ART.Widget.Window.Traits.Animated = new Class({
 	options: {
+		style: {
+			'collapsed-background-color': "#b0b0b0"
+		}
 		/*
 		onDragStart
 		onDragFinish
@@ -7,40 +10,51 @@ ART.Widget.Window.Traits.Animated = new Class({
 	},
 	
 	initialize: function(options) {
-		this.parent(options)
-		this.element.fade('hide')
+		this.parent(options);
+		this.element.fade('hide');
 	},
 	
 	show: function() {
-		this.parent()
-		this.element.fade('in')
+		this.parent();
+		this.element.fade('in');
 	},
 	
 	hide: function() {
-		this.parent()
-		this.element.fade('out')
+		this.parent();
+		this.element.fade('out');
 	},	
 	
 	collapse: function() {
 		if (!this.collapsed) {
 			this.collapsed = true;
 			if (!this.heights) this.heights = [this.footer.offsetHeight, this.element.offsetHeight - this.header.offsetHeight];
-			if (!this.previousResize) this.previousResize = this.options.resize
-			this.options.resize = false
-			this.tween(0, this.header.offsetHeight + 2)
+			if (!this.previousResize) this.previousResize = this.options.resize;
+			this.options.resize = false;
+			this.tween(0, this.header.offsetHeight + 2);
+			if (this.content) {
+				if (!this.content.retrieve('background-color')) this.content.store('background-color', this.content.getStyle('background-color'));
+				this.content.tween('background-color', this.options.style['collapsed-background-color'])
+			}
 		}
 	},
 	
 	expand: function() {
 		if (this.collapsed) {
 			this.collapsed = false;
-			this.options.resize = this.previousResize
+			this.options.resize = this.previousResize;
 			this.tween.apply(this, this.heights);
+			if (this.content) {
+				this.content.tween('background-color', this.content.retrieve('background-color'))
+			}
 		}
 	},
 	
+	toggle: function() {
+		return (this.collapsed) ? (this.expand()) : (this.collapse());
+	},
+	
 	tween: function(footer, content) {
-		if (!this.drawer) this.drawer = new Fx.Draw(this);
+		if (!this.drawer) this.drawer = new Fx.Draw(this, {duration: 300});
 		if (footer == 0) {
 			this.drawer.start({
 				'footer-height': footer,
