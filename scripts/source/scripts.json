@@ -10,9 +10,19 @@
 	
 	"Window": {
 	
-		"Window.ART": {
-			"deps": ["Art.Widgets.Window", "Core.Art"],
+		"Window.Art": {
+			"deps": ["Art.Widgets.Window", "Core.Art", "WindowManager"],
 			"desc": "Window class built upon mootools art."
+		},
+		
+		"Window.Modal": {
+			"deps": ["Window"],
+			"desc": "Modal version of window: you have to pay attention here."
+		},
+		
+		"Window.Notification": {
+			"deps": ["Window"],
+			"desc": "Window closes itself after a short period."
 		},
 		
 		"WindowManager": {
@@ -24,9 +34,9 @@
 	
 	"Layout": {
 		
-		"Layout.ART": {
+		"Layout.Art": {
 			"deps": ["Core.Art"],
-			"deps": "Panels, columns and desktops you love."
+			"desc": "Panels, columns and desktops you love."
 		},
 		
 		"Dock": {
