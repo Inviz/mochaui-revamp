@@ -25,7 +25,7 @@
 	"Layout": {
 		
 		"Layout.ART": {
-			"deps": ["Core.ART"],
+			"deps": ["Core.Art"],
 			"deps": "Panels, columns and desktops you love."
 		},
 		
