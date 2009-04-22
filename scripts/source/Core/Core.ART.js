@@ -67,7 +67,7 @@ MUI.Container = new Class({
 	initialize: function(element, container, options) {
 		this.element = $(element)
 		if (!this.element) return
-		this.container = $(container) || new Element('div', {'class': 'container'}).inject(this.element)
+		this.container = this.append($(container) || new Element('div', {'class': 'container'}));
 		this.padding = Hash.map({'top': 0, 'right': 0, 'bottom': 0, 'left': 0}, function(value, key) {
 			return this.container.getStyle('padding-' + key) || value
 		}, this)
@@ -77,14 +77,17 @@ MUI.Container = new Class({
 	},
 	
 	set: function() {
-		var params = Array.link(arguments, {options: Object.type, content: String.type})
-		if (!Hash.getLength(params)) return
-		if (params.content) params.options = $merge(params.options, {content: params.content})
-
+		var params = Array.link(arguments, {options: Object.type, content: String.type, fn: Function.type, element: Element.type});
+		if (!Hash.getLength(params)) return;
+		if (!params.options) params.options = {};
+		if (params.fn) this.set(params.fn());
+		if (params.element) params.options.element = params.element;
+		
+		if (params.content) params.options = $merge(params.options, {content: params.content});
+		
 		this.setOptions($merge(MUI.ContainerOptions, {padding: this.padding}, params.options))
 		this.pad(this.options.padding)
-		
-		return this.act(this.options)
+		return this.act($merge(params.options, this.options));
 	},
 	
 	load: function() {
@@ -141,8 +144,8 @@ MUI.Container = new Class({
 	},
 	
 	append: function(element) {
-		if (!$type(element) != "element") return false;
-		this.element.adopt(element);
+		if (!$(element)) return false;
+		(this.container || this.element).adopt(element);
 		this.update();
 		return element;
 	},
@@ -161,7 +164,7 @@ MUI.Container = new Class({
 	
 	build: function(attributes) {
 		if ($type(attributes) != 'object') return false;
-		return this.append(new Element(attributes.tag || 'div', attributes));
+		return this.container.adopt(new Element(attributes.tag || 'div', attributes));
 	},
 	
 	update: function() {
@@ -312,16 +315,16 @@ String.implement({
  
 });
 
-// Mootools Patch: Fixes issues in Safari, Chrome, and Internet Explorer caused by processing text as XML. 
-Request.HTML.implement({
- 
-	processHTML: function(text){
-		var match = text.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-		text = (match) ? match[1] : text;
-		return new Element('div', {html: text});  
-	}
-   
-});
+//// Mootools Patch: Fixes issues in Safari, Chrome, and Internet Explorer caused by processing text as XML. 
+//Request.HTML.implement({
+// 
+//	processHTML: function(text){
+//		var match = text.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+//		text = (match) ? match[1] : text;
+//		return new Element('div', {html: text});  
+//	}
+//   
+//});
 
 
 // This makes it so Request will work to some degree locally

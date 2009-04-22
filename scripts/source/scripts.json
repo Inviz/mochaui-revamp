@@ -3,6 +3,7 @@
 	"Core": {
 	
 		"Core.Art": {
+			"deps": ["Class.Extras", "Assets"],
 			"desc": "Core mocha ui stuff. Contains MUI namespace definition"						
 		}
 		
@@ -35,7 +36,7 @@
 	"Layout": {
 		
 		"Layout.Art": {
-			"deps": ["Core.Art"],
+			"deps": ["Core.Art", "Element.Dimensions", "Sortables"],
 			"desc": "Panels, columns and desktops you love."
 		},
 		

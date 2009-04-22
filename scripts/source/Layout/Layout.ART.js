@@ -50,15 +50,11 @@ MUI.Desktop = {
 		this.desktopFooter   = $(this.options.desktopFooter);
 		
 		if (this.desktop) {
-			($$('body')).setStyles({
+			Elements.setStyles([document.body, document.html], {
 				overflow: 'hidden',
 				height: '100%',
 				margin: 0
-			});
-			($$('html')).setStyles({
-				overflow: 'hidden',
-				height: '100%'
-			});			
+			});		
 		}		
 	
 		// This is run on dock initialize so no need to do it twice.
@@ -389,9 +385,9 @@ MUI.Column = new Class({
 		}		
 		
 		// If loading columns into a panel, hide the regular content container.
-		if ($(options.container).getElement('.pad') != null) {
-			$(options.container).getElement('.pad').hide();
-		}
+		// if ($(options.container).getElement('.pad') != null) {
+		// 	$(options.container).getElement('.pad').hide();
+		// }
 		
 		// If loading columns into a window, hide the regular content container.
 		if ($(options.container).getElement('.mochaContent') != null) {
@@ -668,7 +664,7 @@ MUI.Panel = new Class({
 			this.footerWrapperEl = new Element('div', {
 				'id': options.id + '_panelFooterWrapper',
 				'class': 'panel-footerWrapper'
-			}).inject(this.panelEl);
+			}).inject(this.panelEl, 'after');
 			
 			this.footerEl = new Element('div', {
 				'id': options.id + '_panelFooter',
@@ -739,9 +735,6 @@ MUI.Panel = new Class({
 		addResizeBottom(options.id);
 		
 		if (Hash.getLength(options.require)){
-			console.warn($merge(options.require, {
-				onload: this.newPanel.bind(this)
-			}))
 			new MUI.Require(options.require).chain(this.newPanel.bind(this))
 		} else {
 			this.newPanel();
@@ -753,7 +746,6 @@ MUI.Panel = new Class({
 		if (!this.header) this.header = new MUI.Container(this.panelHeaderEl, this.titleEl)
 		if (!this.headerToolbox) this.headerToolbox = new MUI.Container(this.panelHeaderToolboxEl)
 		if (!this.content) this.content = new MUI.Container(this.panelEl, this.contentEl)
-		
 		this.setOptions($merge({
 			footer: this.footer.load(options.footer),
 			header: this.header.load(options.header, options.title),
@@ -900,7 +892,7 @@ MUI.extend({
 			columnHeight -= 1;
 		}
 		column.setStyle('height', columnHeight);
-		
+				
 		// Get column panels
 		var panels = [];
 		column.getChildren('.panelWrapper').each( function(panelWrapper){
@@ -1066,7 +1058,7 @@ MUI.extend({
 			
 		// Get height of all the column's children
 		this.height = 0;
-		column.getChildren().each(function(panelWrapper){
+		column.getElements('.panelWrapper').each(function(panelWrapper){
 			panelWrapper.getChildren().each(function(el){
 				this.height += el.offsetHeight.toInt();
 				if (el.hasClass('panel') && el.getStyle('height').toInt() > tallestPanelHeight){

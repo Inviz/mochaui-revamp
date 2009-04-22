@@ -40,7 +40,6 @@
 				var klass = new Class({Extends: this, options: opts});
 				traits.getKeys().each(function(name) { 
 					name = $name(name).camelCase().capitalize();
-					console.log(name)
 					var trait = this.Traits[name] || this.Base.Traits[name]
 					if (!trait) throw Error("Trait named", name, "is not preset")
 					
