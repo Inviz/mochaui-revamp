@@ -82,6 +82,10 @@ MUI.Container = new Class({
 		if (!params.options) params.options = {};
 		if (params.fn) this.set(params.fn());
 		if (params.element) params.options.element = params.element;
+		if (params.element && params.element.get('iframe')) {
+			params.iframe = params.element;
+			delete params.element
+		}
 		
 		if (params.content) params.options = $merge(params.options, {content: params.content});
 		

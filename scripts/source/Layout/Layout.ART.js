@@ -89,34 +89,34 @@ MUI.Desktop = {
 	onBrowserResize: function(){
 		this.setDesktopSize();
 		// Resize maximized windows to fit new browser window size
-		setTimeout( function(){
-			MUI.Windows.instances.each(function(instance){
-				if (instance.isMaximized){
-
-					// Hide iframe while resize for better performance
-					if ( instance.iframeEl ){
-						instance.iframeEl.setStyle('visibility', 'hidden');
-					}
-
-					var coordinates = document.getCoordinates();
-					var borderHeight = instance.contentBorderEl.getStyle('border-top').toInt() + instance.contentBorderEl.getStyle('border-bottom').toInt();
-					var toolbarHeight = instance.toolbarWrapperEl ? instance.toolbarWrapperEl.getStyle('height').toInt() + instance.toolbarWrapperEl.getStyle('border-top').toInt() : 0;
-					instance.contentWrapperEl.setStyles({
-						'height': coordinates.height - instance.options.headerHeight - instance.options.footerHeight - borderHeight - toolbarHeight,
-						'width': coordinates.width
-					});
-
-					instance.drawWindow();
-					if ( instance.iframeEl ){
-						instance.iframeEl.setStyles({
-							'height': instance.contentWrapperEl.getStyle('height')
-						});
-						instance.iframeEl.setStyle('visibility', 'visible');
-					}
-
-				}
-			}.bind(this));
-		}.bind(this), 100);
+//		setTimeout( function(){
+//			MUI.Windows.instances.each(function(instance){
+//				if (instance.isMaximized){
+//
+//					// Hide iframe while resize for better performance
+//					if ( instance.iframeEl ){
+//						instance.iframeEl.setStyle('visibility', 'hidden');
+//					}
+//
+//					var coordinates = document.getCoordinates();
+//					var borderHeight = instance.contentBorderEl.getStyle('border-top').toInt() + instance.contentBorderEl.getStyle('border-bottom').toInt();
+//					var toolbarHeight = instance.toolbarWrapperEl ? instance.toolbarWrapperEl.getStyle('height').toInt() + instance.toolbarWrapperEl.getStyle('border-top').toInt() : 0;
+//					instance.contentWrapperEl.setStyles({
+//						'height': coordinates.height - instance.options.headerHeight - instance.options.footerHeight - borderHeight - toolbarHeight,
+//						'width': coordinates.width
+//					});
+//
+//					instance.drawWindow();
+//					if ( instance.iframeEl ){
+//						instance.iframeEl.setStyles({
+//							'height': instance.contentWrapperEl.getStyle('height')
+//						});
+//						instance.iframeEl.setStyle('visibility', 'visible');
+//					}
+//
+//				}
+//			}.bind(this));
+//		}.bind(this), 100);
 	},
 	setDesktopSize: function(){
 		var windowDimensions = window.getCoordinates();

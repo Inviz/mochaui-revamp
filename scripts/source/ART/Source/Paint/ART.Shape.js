@@ -28,7 +28,7 @@ ART.Paint.lookupShape = function(name){
 };
 
 // connect to ART.Paint
-
+console.log(123123123123123123)
 ART.Paint.implement({
 
 	shape: function(shape){

@@ -12,7 +12,7 @@
 	"Window": {
 	
 		"Window.Art": {
-			"deps": ["Art.Widgets.Window", "Core.Art", "WindowManager"],
+			"deps": ["ART.Shape", "ART.Widget.Window", "ART.Widget.Button", "Core.Art", "WindowManager"],
 			"desc": "Window class built upon mootools art."
 		},
 		

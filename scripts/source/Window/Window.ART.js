@@ -80,7 +80,7 @@ MUI.Window = new Class({
 	},
 	
 	show: function() {
-		this.parent()
+		this.parent.apply(this, arguments);
 		
 		// Shorten object chain
 		var options = this.options;
@@ -110,10 +110,5 @@ MUI.Window = new Class({
 	//}
 	//
 })
-MUI.Window.extend(Traits)
-
-MUI.Window.Behaviour.set('scripts/source/ART/Source/Ext/Widgets/Traits/Draggable.js', false)
-MUI.Window.Behaviour.set('scripts/source/ART/Source/Ext/Widgets/Traits/Resizable.js', false)
-MUI.Window.Behaviour.set('scripts/source/ART/Source/Ext/Widgets/Traits/Animated.js', false)
-MUI.Window.Behaviour.set('scripts/source/ART/Source/Ext/Widgets/Traits/Themeable.js', false)
-MUI.Window.Behaviour.set('scripts/source/ART/Source/Ext/Widgets/Traits/Controllable.js', false)
+MUI.Window.extend(Traits.of('Art/Widgets/Traits'));
+MUI.Window.Traits = ART.Widget.Window.Traits;
