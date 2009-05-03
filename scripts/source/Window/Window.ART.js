@@ -106,6 +106,6 @@ MUI.Window = new Class({
 	//	this.fireEvent('minimize');
 	//}
 	//
-})
-MUI.Window.extend(Traits.of('Art/Widgets/Traits'));
+});
+MUI.Window.extend(Traits.of('ART/Widgets/Traits'));
 MUI.Window.Traits = ART.Widget.Window.Traits;
