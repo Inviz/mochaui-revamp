@@ -53,3 +53,6 @@ ART.WM = {
 	}
 	
 };
+
+
+ART.WM.init();

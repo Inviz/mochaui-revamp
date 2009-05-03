@@ -30,18 +30,6 @@ MUI.Window = new Class({
 		container:         null,
 		restrict:          true,
 		
-		onShow: function() {
-			ART.WM.include(this)
-			this.blur()
-		},
-		
-		onFocus: function() {
-			console.log('focus')
-		},
-		
-		onBlur: function() {
-			console.log('blur')
-		},
 		header: null,
 		footer: null,
 		
@@ -52,6 +40,12 @@ MUI.Window = new Class({
 	initialize: function(options) {
 		this.parent(options);
 		this.hide()
+		
+		this.addEvent('show', function() {
+			ART.WM.include(this);
+			this.blur();
+		}.bind(this));
+		
 		if (Hash.getLength(this.options.require)) {
 			new MUI.Require($merge(this.options.require, {
 				onload: this.show.bind(this)
@@ -93,7 +87,10 @@ MUI.Window = new Class({
 		
 		this.fireEvent('beforeBuild');
 		
-		$(this).inject(this.options.container || document.body).setStyles({
+		var container = this.options.container || document.body;
+		if ($(this).getParent() != container) $(this).inject(container);
+		
+		$(this).setStyles({
 			position: 'absolute',
 			left: this.options.x,
 			top: this.options.y,

@@ -392,11 +392,9 @@ MUI.Require = new Class({
 		}.bind(this);
 	}
 	
-})
+});
 
-Asset.extend({
-
-	/* Fix an Opera bug in Mootools 1.2 */
+$extend(Asset, {
 	javascript: function(source, properties){
 		properties = $extend({
 			onload: $empty,
