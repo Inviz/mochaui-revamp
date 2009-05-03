@@ -2,7 +2,7 @@
 	
 	"Core": {
 	
-		"Core.Art": {
+		"Core.ART": {
 			"deps": ["Class.Extras", "Assets"],
 			"desc": "Core mocha ui stuff. Contains MUI namespace definition"						
 		}
@@ -11,8 +11,8 @@
 	
 	"Window": {
 	
-		"Window.Art": {
-			"deps": ["ART.Shape", "ART.Widget.Window", "ART.Widget.Button", "Core.Art", "WindowManager"],
+		"Window.ART": {
+			"deps": ["ART.Shape", "ART.Widget.Window", "ART.Widget.Button", "Core.ART", "WindowManager"],
 			"desc": "Window class built upon mootools art."
 		},
 		
@@ -35,8 +35,8 @@
 	
 	"Layout": {
 		
-		"Layout.Art": {
-			"deps": ["Core.Art", "Element.Dimensions", "Sortables"],
+		"Layout.ART": {
+			"deps": ["Core.ART", "Element.Dimensions", "Sortables"],
 			"desc": "Panels, columns and desktops you love."
 		},
 		
