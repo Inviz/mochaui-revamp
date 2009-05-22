@@ -16,11 +16,6 @@
 			"desc": "Window class built upon mootools art."
 		},
 		
-		"Window.Modal": {
-			"deps": ["Window"],
-			"desc": "Modal version of window: you have to pay attention here."
-		},
-		
 		"Window.Notification": {
 			"deps": ["Window"],
 			"desc": "Window closes itself after a short period."

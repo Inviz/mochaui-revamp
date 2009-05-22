@@ -39,8 +39,7 @@ MUI.Window = new Class({
 	
 	initialize: function(options) {
 		this.parent(options);
-		this.element.store('instance', this)
-		this.hide();
+		this.hide()
 		
 		this.addEvent('show', function() {
 			ART.WM.include(this);
