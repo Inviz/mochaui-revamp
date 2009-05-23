@@ -178,10 +178,6 @@ MUI.Container = new Class({
 	recieve: function(html) {
 		this.render(html);
 		this.xhr.fireEvent('apply');
-	},
-	
-	toElement: function() {
-		return this.element;
 	}
 	
 });
