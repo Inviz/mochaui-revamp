@@ -70,10 +70,7 @@ MUI.Container = new Class({
 		this.container = this.append($(container) || new Element('div', {'class': 'container'}));
 		this.padding = Hash.map({'top': 0, 'right': 0, 'bottom': 0, 'left': 0}, function(value, key) {
 			return this.container.getStyle('padding-' + key) || value
-		}, this);
-		if (this.padding.every(function(number) {return number == '0px'})) {
-			this.padding = {}
-		}
+		}, this)
 		
 		this.set(options)
 		return this
@@ -104,6 +101,7 @@ MUI.Container = new Class({
 	
 	pad: function(padding) {
 		if (!$chk(padding)) return
+		
 		switch($type(padding)) {
 			case "number": case "string":
 				return this.container.setStyle('padding', padding)
@@ -164,7 +162,7 @@ MUI.Container = new Class({
 	},
 	
 	render: function(html) {
-		if ($type(html) != 'string' || html.match(/^\s*$/)) return false;
+		if ($type(html) != 'string' || !html.length) return false;
 		if (this.container) return this.container.empty().set('html', html);
 	},
 	
