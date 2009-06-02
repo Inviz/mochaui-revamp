@@ -42,7 +42,7 @@ MUI.Window = new Class({
 		this.hide()
 		
 		this.addEvent('show', function() {
-			ART.WM.include(this);
+			MUI.WM.include(this);
 			this.blur();
 		}.bind(this));
 		
