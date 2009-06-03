@@ -3,7 +3,6 @@
 ART.WM = {
 	
 	windows: [],
-	offset: 2000,
 	
 	init: function(){
 		
@@ -48,9 +47,7 @@ ART.WM = {
 			win.focus();
 		}
 		ART.WM.windows.each(function(w, i){
-			w.index = ART.WM.offset + 25 * (ART.WM.windows.length - i + 1);
-			if (w.setIndex) w.setIndex(w.index);
-			w.element.setStyle('z-index', w.index);
+			w.element.setStyle('z-index', ART.WM.windows.length - i + 1);
 			if (w != win) w.blur();
 		});
 	}
