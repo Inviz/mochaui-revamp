@@ -93,10 +93,17 @@ MUI.Window = new Class({
 		$(this).setStyles({
 			position: 'absolute',
 			left: this.options.x,
-			top: this.options.y,
-			zIndex: 250
-		})
-	}//,
+			top: this.options.y
+		});
+		this.focus();
+	},
+	
+	setIndex: function(index) {
+		this.index = index;
+		this.element.setStyle('z-index', index);
+		this.fireEvent('index', index);
+	}
+	//,
 	//
 	//maximize: function() {
 	//	this.fireEvent('maximize');
